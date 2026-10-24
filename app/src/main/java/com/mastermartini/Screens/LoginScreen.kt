@@ -33,20 +33,26 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.mastermartini.R
+import com.mastermartini.navigation.AppScreens
 import com.mastermartini.ui.theme.MasterMartiniTheme
 
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navController: NavController) {
     Scaffold { innerPadding ->
-        BodyContent(modifier = Modifier.padding(innerPadding))
+        BodyContent(
+            navController = navController,
+            modifier = Modifier.padding(innerPadding)
+        )
     }
 }
 
 
 @Composable
-fun BodyContent(modifier: Modifier = Modifier) {
+fun BodyContent(navController: NavController, modifier: Modifier = Modifier) {
     // Estado solo para que los campos se puedan escribir (sin lógica de login)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -121,7 +127,7 @@ fun BodyContent(modifier: Modifier = Modifier) {
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("¿No tienes cuenta?")
-            TextButton(onClick = {}) {
+            TextButton(onClick = { navController.navigate(AppScreens.registerScreen.route) }) {
                 Text("Regístrate")
             }
         }
@@ -148,6 +154,6 @@ fun LogoImage() {
 @Composable
 fun DefaultPreview() {
     MasterMartiniTheme {
-        LoginScreen()
+        LoginScreen(rememberNavController())
     }
 }
