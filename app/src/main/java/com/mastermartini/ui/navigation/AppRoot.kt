@@ -7,15 +7,23 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.mastermartini.ui.catalogo.CatalogoScreen
 import com.mastermartini.ui.home.HomeScreen
 
 @Composable
 fun AppRoot() {
     val nav = rememberNavController()
 
-    Scaffold() { padding ->
-        NavHost(nav, startDestination = "home", modifier = Modifier.padding(padding)) {
-            composable("home") { HomeScreen() }
+    Scaffold(
+        bottomBar = { BottomBar(nav) }
+    ) { padding ->
+        NavHost(
+            nav,
+            startDestination = "home",
+            modifier = Modifier.padding(padding)
+        ) {
+            composable(Destination.Home.route) { HomeScreen() }
+            composable(Destination.Catalogo.route) { CatalogoScreen() }
         }
     }
 }
