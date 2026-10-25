@@ -1,6 +1,6 @@
 package com.mastermartini.data.model
 
-data class Recipe(
+data class Receta(
     val id: Int,
     val title: String,
     val author: String,

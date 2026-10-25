@@ -25,10 +25,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,22 +37,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mastermartini.R
-import com.mastermartini.data.model.Recipe
+import com.mastermartini.data.model.Receta
 import com.mastermartini.ui.theme.MasterMartiniTheme
 
-
-private val fakeRecipes = listOf(
-    Recipe(1, "Pastel Chocolate", "Master Martini", R.drawable.pastelchocolate),
-    Recipe(2, "Pastel Crema", "Master Martini", R.drawable.pastelcrema),
-    Recipe(3, "Donuts", "Master Martini", R.drawable.donuts),
-)
-
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
-    var query by remember { mutableStateOf("") }
-    var selected by remember { mutableStateOf("Destacados") }
+fun HomeScreen(
+    uiState: HomeUiState,
 
-    val categories = listOf("Destacados", "Nuevo", "Popular",)
+    onQueryChange: (String) -> Unit,
+    onCategorySelected: (String) -> Unit,
+
+    modifier: Modifier = Modifier
+) {
+
+    val categories = listOf("Destacados", "Nuevo", "Popular")
 
     LazyColumn(
         modifier = modifier.fillMaxSize(),
@@ -90,8 +84,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         /* Buscador */
         item {
             OutlinedTextField(
-                value = query,
-                onValueChange = { query = it },
+                value = uiState.query,
+                onValueChange = onQueryChange,
                 placeholder = { Text("Buscar recetas") },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
 
@@ -133,11 +127,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 categories.forEach { name ->
-                    val isSelected = name == selected
+                    val isSelected = name == uiState.selectedCategory
 
                     FilterChip(
                         selected = isSelected,
-                        onClick = { selected = name },
+                        onClick = { onCategorySelected(name) },
                         label = { Text(
                             text = name,
                             modifier = Modifier.fillMaxWidth(),
@@ -166,14 +160,14 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         }
 
         /* Tarjetas de recetas */
-        items(fakeRecipes, key = { it.id }) { recipe ->
-            RecipeCard(recipe)
+        items(uiState.recetas, key = { it.id }) { receta ->
+            RecetaCard(receta)
         }
     }
 }
 
 @Composable
-fun RecipeCard(recipe: Recipe) {
+fun RecetaCard(receta: Receta) {
 
     Card(
         shape = RoundedCornerShape(24.dp),
@@ -182,8 +176,8 @@ fun RecipeCard(recipe: Recipe) {
     ) {
         Column {
             Image(
-                painter = painterResource(recipe.imageRes),
-                contentDescription = recipe.title,
+                painter = painterResource(receta.imageRes),
+                contentDescription = receta.title,
                 contentScale = ContentScale.Crop,
 
                 modifier = Modifier
@@ -201,12 +195,12 @@ fun RecipeCard(recipe: Recipe) {
             ) {
                 Column {
                     Text(
-                        text = recipe.title,
+                        text = receta.title,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                     Text(
-                        text = recipe.author,
+                        text = receta.author,
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -219,5 +213,16 @@ fun RecipeCard(recipe: Recipe) {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-    MasterMartiniTheme { HomeScreen() }
+    MasterMartiniTheme {
+        HomeScreen(
+            uiState = HomeUiState(
+                isLoading = false,
+                recetas = listOf(
+                    Receta(1, "Pastel Chocolate", "Master Martini", R.drawable.pastelchocolate)
+                ),
+            ),
+            onQueryChange = {},
+            onCategorySelected = {},
+        )
+    }
 }
