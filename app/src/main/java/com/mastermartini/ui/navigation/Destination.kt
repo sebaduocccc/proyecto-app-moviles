@@ -14,4 +14,6 @@ sealed class Destination(
     object Catalogo : Destination("catalogo", "Catálogo", Icons.Default.ShoppingCart)
 }
 
-val bottomBarItems = listOf(Destination.Home, Destination.Catalogo)
+val bottomBarItems = listOf(
+    Destination.Home, Destination.Catalogo
+)
