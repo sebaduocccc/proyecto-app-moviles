@@ -1,8 +1,6 @@
 package com.mastermartini.Screens
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,15 +13,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,17 +27,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.mastermartini.components.BirthDateField
+import com.mastermartini.components.PasswordField
 import com.mastermartini.ui.theme.MasterMartiniTheme
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
-import java.util.TimeZone
+import java.time.LocalDate
 
 
 @Composable
@@ -65,8 +56,7 @@ fun RegisterContent(navController: NavController, modifier: Modifier = Modifier)
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-    var birthDate by remember { mutableStateOf("") }
+    var birthDate by remember { mutableStateOf<LocalDate?>(null) }
 
     Column(
         modifier = modifier
@@ -93,6 +83,9 @@ fun RegisterContent(navController: NavController, modifier: Modifier = Modifier)
 
         Spacer(modifier = Modifier.height(24.dp))
 
+
+
+        //formulario
         Row(modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
                 value = name,
@@ -137,20 +130,9 @@ fun RegisterContent(navController: NavController, modifier: Modifier = Modifier)
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
+        PasswordField(
             value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (passwordVisible) VisualTransformation.None
-            else PasswordVisualTransformation(),
-            trailingIcon = {
-                TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Text(if (passwordVisible) "Ocultar" else "Ver")
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
+            onValueChange = { password = it }
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -171,8 +153,13 @@ fun RegisterContent(navController: NavController, modifier: Modifier = Modifier)
             Text("Registrarse")
         }
 
+
+        //fin formulario
         Spacer(modifier = Modifier.height(24.dp))
 
+
+
+        // final
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("¿Ya tienes cuenta?")
             // Vuelve al login que ya está abajo en la pila, en vez de abrir otro encima
@@ -180,62 +167,10 @@ fun RegisterContent(navController: NavController, modifier: Modifier = Modifier)
                 Text("Inicia sesión")
             }
         }
+
+
+
     }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun BirthDateField(value: String, onDateSelected: (String) -> Unit) {
-    var showPicker by remember { mutableStateOf(false) }
-    val datePickerState = rememberDatePickerState()
-
-    // El campo es de solo lectura; al tocarlo se abre el calendario
-    Box {
-        OutlinedTextField(
-            value = value,
-            onValueChange = {},
-            label = { Text("Fecha de nacimiento") },
-            placeholder = { Text("dd/mm/aaaa") },
-            readOnly = true,
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
-        )
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .clickable { showPicker = true }
-        )
-    }
-
-    if (showPicker) {
-        DatePickerDialog(
-            onDismissRequest = { showPicker = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    datePickerState.selectedDateMillis?.let { onDateSelected(formatDate(it)) }
-                    showPicker = false
-                }) {
-                    Text("Aceptar")
-                }
-            },
-            dismissButton = {
-                TextButton(onClick = { showPicker = false }) {
-                    Text("Cancelar")
-                }
-            }
-        ) {
-            DatePicker(state = datePickerState)
-        }
-    }
-}
-
-
-// El DatePicker entrega la fecha en milisegundos UTC
-private fun formatDate(millis: Long): String {
-    val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-    formatter.timeZone = TimeZone.getTimeZone("UTC")
-    return formatter.format(Date(millis))
 }
 
 

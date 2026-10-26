@@ -29,13 +29,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.mastermartini.R
+import com.mastermartini.components.PasswordField
 import com.mastermartini.navigation.AppScreens
 import com.mastermartini.ui.theme.MasterMartiniTheme
 
@@ -56,7 +55,6 @@ fun BodyContent(navController: NavController, modifier: Modifier = Modifier) {
     // Estado solo para que los campos se puedan escribir (sin lógica de login)
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier
@@ -89,20 +87,9 @@ fun BodyContent(navController: NavController, modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        OutlinedTextField(
+        PasswordField(
             value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = if (passwordVisible) VisualTransformation.None
-            else PasswordVisualTransformation(),
-            trailingIcon = {
-                TextButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Text(if (passwordVisible) "Ocultar" else "Ver")
-                }
-            },
-            modifier = Modifier.fillMaxWidth()
+            onValueChange = { password = it }
         )
 
         TextButton(
@@ -115,7 +102,7 @@ fun BodyContent(navController: NavController, modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
-            onClick = {},
+            onClick = { println("ola")},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
