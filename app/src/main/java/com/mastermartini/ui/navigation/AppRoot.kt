@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mastermartini.ui.catalogo.CatalogoScreen
 import com.mastermartini.ui.home.HomeRoute
+import com.mastermartini.ui.catalogo.CatalogoRoute
 
 @Composable
 fun AppRoot() {
@@ -23,7 +23,7 @@ fun AppRoot() {
             modifier = Modifier.padding(padding)
         ) {
             composable(Destination.Home.route) { HomeRoute() }
-            composable(Destination.Catalogo.route) { CatalogoScreen() }
+            composable(Destination.Catalogo.route) { CatalogoRoute() }
         }
     }
 }
