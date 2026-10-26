@@ -19,19 +19,35 @@ import androidx.compose.runtime.setValue
 fun AppNavigation() {
 
     val navController = rememberNavController()
-    var name by remember { mutableStateOf("Vicente") }
-    var lastName by remember { mutableStateOf("Garcia") }
-    var username by remember { mutableStateOf("vicentitoxd") }
+    var name by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
     NavHost(navController = navController, startDestination = AppScreens.loginScreen.route)
     {
         composable(AppScreens.loginScreen.route) {
             LoginScreen(navController)
         }
         composable(AppScreens.registerScreen.route) {
-            RegisterScreen(navController)
+            RegisterScreen(navController = navController,
+                onRegister = { registeredName, registeredLastName, registeredUsername ->
+                    name = registeredName
+                    lastName = registeredLastName
+                    username = registeredUsername
+
+                    navController.navigate(AppScreens.profileScreen.route) {
+                        popUpTo(AppScreens.registerScreen.route) {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable(AppScreens.profileScreen.route) {
-            ProfileScreen(navController,name,lastName,username)
+            ProfileScreen(navController = navController,
+                name = name,
+                lastName = lastName,
+                username = username
+            )
         }
         composable(AppScreens.editProfileScreen.route) {
             EditProfileScreen(

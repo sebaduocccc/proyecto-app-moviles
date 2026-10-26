@@ -47,18 +47,20 @@ import java.util.TimeZone
 
 
 @Composable
-fun RegisterScreen(navController: NavController) {
+fun RegisterScreen(navController: NavController,
+                   onRegister:(String,String,String)-> Unit) {
     Scaffold { innerPadding ->
         RegisterContent(
             navController = navController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            onRegister = onRegister
         )
     }
 }
 
 
 @Composable
-fun RegisterContent(navController: NavController, modifier: Modifier = Modifier) {
+fun RegisterContent(navController: NavController, modifier: Modifier = Modifier, onRegister: (String, String, String) -> Unit) {
     // Estado solo para que los campos se puedan escribir (sin lógica de registro)
     var name by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -163,7 +165,7 @@ fun RegisterContent(navController: NavController, modifier: Modifier = Modifier)
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = {},
+            onClick = {onRegister(name.trim(), lastName.trim(), username.trim())},
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp)
@@ -243,6 +245,7 @@ private fun formatDate(millis: Long): String {
 @Composable
 fun RegisterPreview() {
     MasterMartiniTheme {
-        RegisterScreen(rememberNavController())
+        RegisterScreen(rememberNavController(),
+            onRegister = {_,_,_->})
     }
 }
