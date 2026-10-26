@@ -1,7 +1,10 @@
 package com.mastermartini.Screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +34,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import com.mastermartini.ui.theme.Cyan
+import com.mastermartini.ui.theme.Khaki
 
 
 @Composable
@@ -58,21 +65,29 @@ fun ProfileContent(
     username: String,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(24.dp)
-    ) {Text(
-        text = "Mi perfil",
-        style = MaterialTheme.typography.headlineMedium,
-        color = MaterialTheme.colorScheme.primary
-    ) }
+    Column (
+        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.logo),
+            contentDescription = "Logo de Master Martini",
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.align(Alignment.CenterHorizontally)
+        )
+        Text(
+            text = "Mi Perfil",
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
 
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(top = 72.dp),
+            .padding(top = 100.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         ProfileImage()
@@ -101,14 +116,61 @@ fun ProfileContent(
         }
 
     }
-    Column(modifier = Modifier.fillMaxWidth().padding(top=320.dp),
+    Column(modifier = Modifier.fillMaxWidth().padding(top=340.dp),
         horizontalAlignment = Alignment.CenterHorizontally) {
         Text(text = "Ultimas Recetas")
+        Spacer(modifier = Modifier.height(8.dp))
+        RecetaCard()
     }
 
 
-}
 
+
+
+}
+@Composable
+fun RecetaCard() {
+
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+    ) {
+        Column {
+            Image(
+                painter = painterResource(R.drawable.pastelchocolate),
+                contentDescription = "Pastel Chocolate",
+                contentScale = ContentScale.Crop,
+
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(190.dp)
+                    .clip(RoundedCornerShape(20.dp))
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text(
+                        text = "Pastel De Chocolate",
+                        fontWeight = FontWeight.SemiBold,
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                    Text(
+                        text = "Hecho por Vicente",
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+        }
+    }
+}
 @Composable
 fun ProfileImage(modifier: Modifier=Modifier){
     //imagen solo es placeholder
