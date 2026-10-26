@@ -1,5 +1,6 @@
 package com.mastermartini.Screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -28,24 +29,28 @@ import androidx.compose.ui.unit.dp
 import com.mastermartini.R
 import com.mastermartini.ui.theme.MasterMartiniTheme
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
+import com.mastermartini.components.ProfileImage
+import com.mastermartini.navigation.AppNavigation
+import com.mastermartini.navigation.AppScreens
 import com.mastermartini.ui.theme.Cyan
 import com.mastermartini.ui.theme.Khaki
 
 
 @Composable
-fun ProfileScreen(
-    name: String,
-    lastName: String,
-    username: String
-) {
+fun ProfileScreen(navController: NavController,
+                  name:String,lastName:String,username:String) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
@@ -53,80 +58,93 @@ fun ProfileScreen(
             name = name,
             lastName = lastName,
             username = username,
+            navController = navController,
+
             modifier = Modifier.padding(innerPadding)
+
         )
     }
 }
 
 @Composable
 fun ProfileContent(
+    navController: NavController,
+    modifier: Modifier = Modifier,
     name: String,
     lastName: String,
-    username: String,
-    modifier: Modifier = Modifier
+    username: String
 ) {
-    Column (
-        modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 20.dp, vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         Image(
             painter = painterResource(R.drawable.logo),
             contentDescription = "Logo de Master Martini",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
+            modifier = Modifier
+                .height(56.dp)
+                .align(Alignment.CenterHorizontally)
         )
+
         Text(
-            text = "Mi Perfil",
-            fontSize = 28.sp,
+            text = "Mi perfil",
+            style = MaterialTheme.typography.headlineMedium,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.primary
         )
-    }
 
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(24.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
+            ),
+            elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                ProfileImage()
 
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(top = 100.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        ProfileImage()
+                Text(
+                    text = "$name $lastName",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold
+                )
 
-        Text(
-            text = "$name $lastName",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onBackground
-        )
+                Text(
+                    text = "@$username",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
 
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Text(
-            text = "@$username",
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-
-        Button(
-            onClick = {},
-            modifier = Modifier
-                .height(40.dp)
-        ){
-            Text("Editar perfil")
+                Button(
+                    onClick = {
+                        navController.navigate(AppScreens.editProfileScreen.route)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Editar perfil")
+                }
+            }
         }
 
-    }
-    Column(modifier = Modifier.fillMaxWidth().padding(top=340.dp),
-        horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = "Ultimas Recetas")
-        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = "Últimas recetas",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold
+        )
+
         RecetaCard()
     }
-
-
-
-
-
 }
 @Composable
 fun RecetaCard() {
@@ -171,21 +189,7 @@ fun RecetaCard() {
         }
     }
 }
-@Composable
-fun ProfileImage(modifier: Modifier=Modifier){
-    //imagen solo es placeholder
-    val image = painterResource(R.drawable.profile)
-    Column(
-        modifier = Modifier.size(128.dp)
-            .clip(CircleShape)) {
-        Image(
-            painter = image,
-            contentDescription = null
 
-        )
-    }
-
-}
 
 @Preview(showBackground = true)
 @Composable
@@ -195,8 +199,10 @@ fun ProfilePreview() {
             //Nombres solo son placeholders
             name = "Vicente",
             lastName = "Garcia",
-            username = "vicentitoxd"
-        )
+            username = "vicentitoxd",
+            navController = rememberNavController())
+
     }
 }
+
 
