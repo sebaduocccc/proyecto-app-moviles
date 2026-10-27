@@ -15,12 +15,17 @@ class RoomUsuarioRepository(
     private val dao: UsuarioDao
 ) : UsuarioRepository {
 
+    private val preferences = context.getSharedPreferences(
+        "sesion_usuario",
+        Context.MODE_PRIVATE
+    )
     private val mutex = Mutex()
 
     override suspend fun login(email: String, password: String): Usuario? {
         cargarUsuariosIniciales()
         val usuario = dao.buscarPorEmail(email.trim()) ?: return null
-        return usuario.takeIf { it.password == password }
+        return usuario.takeIf { it.password == password }?.also {
+            guardarUsuarioActual(it.id)}
     }
 
     override suspend fun existeEmail(email: String): Boolean {
@@ -35,14 +40,30 @@ class RoomUsuarioRepository(
 
     override suspend fun registrar(usuario: Usuario): Usuario {
         cargarUsuariosIniciales()
-        val id = dao.insertar(usuario)
-        return usuario.copy(id = id.toInt())
+        val id = dao.insertar(usuario).toInt()
+        val usuarioRegistrado = usuario.copy(id = id)
+
+        guardarUsuarioActual(usuarioRegistrado.id)
+        return usuarioRegistrado
+    }
+    override suspend fun guardarUsuarioActual(usuarioId: Int) {
+        preferences.edit()
+            .putInt("usuario_id", usuarioId)
+            .apply()
     }
 
     private suspend fun cargarUsuariosIniciales() = mutex.withLock {
         if (dao.contar() == 0) {
             dao.insertarTodos(obtenerUsuariosDesdeAssets())
         }
+    }
+    override suspend fun obtenerUsuarioActual(): Usuario? {
+        cargarUsuariosIniciales()
+
+        val usuarioId = preferences.getInt("usuario_id", -1)
+        if (usuarioId == -1) return null
+
+        return dao.buscarPorId(usuarioId)
     }
 
     private suspend fun obtenerUsuariosDesdeAssets(filename: String = "usuarios.json"): List<Usuario> =
@@ -56,4 +77,30 @@ class RoomUsuarioRepository(
                 emptyList()
             }
         }
+    override suspend fun actualizarPerfil(
+        nombre: String,
+        apellido: String,
+        username: String
+    ): Usuario {
+        val usuario = obtenerUsuarioActual()
+            ?: throw IllegalStateException("No hay un usuario autenticado")
+
+        val usernameLimpio = username.trim().removePrefix("@")
+
+        val usernameEnUso = existeUsername(usernameLimpio)
+
+        if (usernameEnUso && usernameLimpio != usuario.username) {
+            throw IllegalArgumentException("Este nombre de usuario ya existe")
+        }
+
+        val actualizado = usuario.copy(
+            nombre = nombre.trim(),
+            apellido = apellido.trim(),
+            username = usernameLimpio
+        )
+
+        dao.actualizar(actualizado)
+        return actualizado
+    }
+
 }
