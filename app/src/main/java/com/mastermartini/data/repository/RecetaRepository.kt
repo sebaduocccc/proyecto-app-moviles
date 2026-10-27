@@ -7,4 +7,5 @@ interface RecetaRepository {
 
     val recetas: StateFlow<List<Receta>>
 
+    fun getReceta(id: Int): Receta?
 }
