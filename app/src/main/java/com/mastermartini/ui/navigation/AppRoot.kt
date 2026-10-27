@@ -3,25 +3,53 @@ package com.mastermartini.ui.navigation
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.mastermartini.navigation.AppScreens
 import com.mastermartini.ui.home.HomeRoute
 import com.mastermartini.ui.catalogo.CatalogoRoute
+import com.mastermartini.ui.login.LoginRoute
+import com.mastermartini.ui.register.RegisterRoute
 
 @Composable
 fun AppRoot() {
     val nav = rememberNavController()
+    val backStackEntry by nav.currentBackStackEntryAsState()
+    val currentRoute = backStackEntry?.destination?.route
+    val showBottomBar = bottomBarItems.any { it.route == currentRoute }
 
     Scaffold(
-        bottomBar = { BottomBar(nav) }
+        bottomBar = { if (showBottomBar) BottomBar(nav) }
     ) { padding ->
         NavHost(
             nav,
-            startDestination = "home",
+            startDestination = AppScreens.loginScreen.route,
             modifier = Modifier.padding(padding)
         ) {
+            composable(AppScreens.loginScreen.route) {
+                LoginRoute(
+                    onLoginSuccess = {
+                        nav.navigate(Destination.Home.route) {
+                            popUpTo(AppScreens.loginScreen.route) { inclusive = true }
+                        }
+                    },
+                    onRegisterClick = { nav.navigate(AppScreens.registerScreen.route) }
+                )
+            }
+            composable(AppScreens.registerScreen.route) {
+                RegisterRoute(
+                    onRegisterSuccess = {
+                        nav.navigate(Destination.Home.route) {
+                            popUpTo(AppScreens.loginScreen.route) { inclusive = true }
+                        }
+                    },
+                    onLoginClick = { nav.popBackStack() }
+                )
+            }
             composable(Destination.Home.route) { HomeRoute() }
             composable(Destination.Catalogo.route) { CatalogoRoute() }
         }

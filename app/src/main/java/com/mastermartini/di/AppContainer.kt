@@ -1,12 +1,24 @@
 package com.mastermartini.di
 
+import android.content.Context
+import androidx.room.Room
+import com.mastermartini.data.local.AppDatabase
 import com.mastermartini.data.repository.FakeProductoRepository
 import com.mastermartini.data.repository.FakeRecetaRepository
 import com.mastermartini.data.repository.ProductoRepository
 import com.mastermartini.data.repository.RecetaRepository
+import com.mastermartini.data.repository.RoomUsuarioRepository
+import com.mastermartini.data.repository.UsuarioRepository
 
-class AppContainer {
+class AppContainer(context: Context) {
+
+    private val database: AppDatabase by lazy {
+        Room.databaseBuilder(context, AppDatabase::class.java, "master_martini.db").build()
+    }
 
     val recetaRepository: RecetaRepository = FakeRecetaRepository()
     val productoRepository: ProductoRepository = FakeProductoRepository()
+    val usuarioRepository: UsuarioRepository by lazy {
+        RoomUsuarioRepository(context, database.usuarioDao())
+    }
 }

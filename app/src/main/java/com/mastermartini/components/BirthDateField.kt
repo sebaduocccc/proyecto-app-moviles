@@ -2,11 +2,11 @@ package com.mastermartini.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -21,22 +21,26 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BirthDateField(value: LocalDate?, onDateSelected: (LocalDate) -> Unit) {
+fun BirthDateField(
+    value: LocalDate?,
+    onDateSelected: (LocalDate) -> Unit,
+    modifier: Modifier = Modifier,
+    error: String? = null,
+) {
     var showPicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
 
-    // El campo es de solo lectura; al tocarlo se abre el calendario
-    Box {
-        OutlinedTextField(
-            value = value?.format(dateFormatter) ?: "",
+    Box(modifier = modifier) {
+        FormTextField(
+            value = value?.format(dateFormatter).orEmpty(),
             onValueChange = {},
-            label = { Text("Fecha de nacimiento") },
-            placeholder = { Text("dd/mm/aaaa") },
-            readOnly = true,
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth()
+            label = "Fecha de nacimiento",
+            leadingIcon = Icons.Default.CalendarMonth,
+            placeholder = "dd/mm/aaaa",
+            error = error,
+            readOnly = true
         )
         Box(
             modifier = Modifier
@@ -67,9 +71,7 @@ fun BirthDateField(value: LocalDate?, onDateSelected: (LocalDate) -> Unit) {
     }
 }
 
-
 private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
 
-// El DatePicker entrega la fecha en milisegundos UTC
 private fun millisToLocalDate(millis: Long): LocalDate =
     Instant.ofEpochMilli(millis).atZone(ZoneOffset.UTC).toLocalDate()
