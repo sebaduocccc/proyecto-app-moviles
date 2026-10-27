@@ -48,6 +48,15 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+
+    implementation("com.google.code.gson:gson:2.9.0")
+
+    implementation("io.coil-kt:coil-compose:2.3.0")
+
     coreLibraryDesugaring(libs.desugar.jdk.libs)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))

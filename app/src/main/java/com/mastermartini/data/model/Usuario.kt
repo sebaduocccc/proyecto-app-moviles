@@ -9,5 +9,6 @@ data class Usuario(
     val username: String,
     val email: String,
     val password: String,
-    val fechaNacimiento: LocalDate
+    val fechaNacimiento: String,
+    val role: String
 )

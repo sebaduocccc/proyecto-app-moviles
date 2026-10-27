@@ -22,7 +22,6 @@ import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BirthDateField(value: LocalDate?, onDateSelected: (LocalDate) -> Unit) {
     var showPicker by remember { mutableStateOf(false) }
