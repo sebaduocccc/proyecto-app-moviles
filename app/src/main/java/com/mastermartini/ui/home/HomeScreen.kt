@@ -46,6 +46,7 @@ fun HomeScreen(
 
     onQueryChange: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
+    onRecetaClick: (Int) -> Unit,
 
     modifier: Modifier = Modifier
 ) {
@@ -161,15 +162,20 @@ fun HomeScreen(
 
         /* Tarjetas de recetas */
         items(uiState.recetas, key = { it.id }) { receta ->
-            RecetaCard(receta)
+            RecetaCard(receta, onClick = { onRecetaClick(receta.id) })
         }
     }
 }
 
 @Composable
-fun RecetaCard(receta: Receta) {
+fun RecetaCard(
 
+    receta: Receta,
+    onClick: () -> Unit,
+
+) {
     Card(
+        onClick = onClick,
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -218,11 +224,20 @@ fun HomePreview() {
             uiState = HomeUiState(
                 isLoading = false,
                 recetas = listOf(
-                    Receta(1, "Pastel Chocolate", "Master Martini", R.drawable.pastelchocolate)
+                    Receta(
+                        1,
+                        "Pastel Chocolate",
+                        "Master Martini",
+                        R.drawable.pastelchocolate,
+                        60,
+                        emptyList(),
+                        emptyList(),
+                    )
                 ),
             ),
             onQueryChange = {},
             onCategorySelected = {},
+            onRecetaClick = {},
         )
     }
 }

@@ -14,6 +14,15 @@ sealed class Destination(
     object Catalogo : Destination("catalogo", "Catálogo", Icons.Default.ShoppingCart)
 }
 
+object RecetaDetalleDestination {
+
+    const val ARG_RECETA_ID = "recetaId"
+
+    const val ROUTE = "receta/{$ARG_RECETA_ID}"
+
+    fun createRoute(id: Int) = "receta/$id"
+}
+
 val bottomBarItems = listOf(
     Destination.Home, Destination.Catalogo
 )
