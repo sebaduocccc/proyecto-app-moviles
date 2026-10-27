@@ -1,0 +1,34 @@
+[
+  {
+    "id": "1",
+    "nombre": "admin",
+    "apellido": "garcia",
+    "username": "admin",
+    "email": "admin@mastermartini.cl",
+    "password": "admin",
+    "fechaNacimiento": "01/01/2001",
+    "role": "admin"
+  },
+  {
+    "id": "2",
+    "nombre": "vicentito",
+    "apellido": "garcia",
+    "username": "vixo01",
+    "email": "vicentito@gmail.com",
+    "password": "vicenteDios",
+    "fechaNacimiento": "17/07/2000",
+    "role": "admin"
+  },
+  {
+    "id": "3",
+    "nombre": "rodri",
+    "apellido": "baes",
+    "username": "rodri@gmail.com",
+    "email": "srbaes@gmail.com",
+    "password": "rodri",
+    "fechaNacimiento": "30/09/1999",
+    "role": "admin"
+  }
+
+
+]

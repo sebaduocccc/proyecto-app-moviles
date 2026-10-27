@@ -5,6 +5,10 @@ import com.mastermartini.di.AppContainer
 
 class MasterMartiniApp : Application() {
 
-    val container = AppContainer()
+    lateinit var container: AppContainer
 
+    override fun onCreate() {
+        super.onCreate()
+        container = AppContainer(this)
+    }
 }
