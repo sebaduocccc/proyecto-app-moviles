@@ -1,4 +1,4 @@
-package com.mastermartini.Screens
+package com.mastermartini.ui.profile
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
