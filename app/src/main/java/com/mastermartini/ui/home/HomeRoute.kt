@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun HomeRoute(
+    onRecetaClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 
     viewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory)
@@ -19,6 +20,7 @@ fun HomeRoute(
 
         onQueryChange = viewModel::onQueryChange,
         onCategorySelected = viewModel::onCategorySelected,
+        onRecetaClick = onRecetaClick,
         modifier = modifier,
     )
 }
