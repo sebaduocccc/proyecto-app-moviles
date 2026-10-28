@@ -12,15 +12,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mastermartini.navigation.AppScreens
 import com.mastermartini.ui.catalogo.CatalogoRoute
 import com.mastermartini.ui.home.HomeRoute
 import com.mastermartini.ui.login.LoginRoute
 import com.mastermartini.ui.productodetalle.ProductoDetalleRoute
-
-import com.mastermartini.ui.catalogo.CatalogoRoute
-import com.mastermartini.ui.home.HomeRoute
-import com.mastermartini.ui.login.LoginRoute
 import com.mastermartini.ui.profile.EditProfileRoute
 import com.mastermartini.ui.profile.ProfileRoute
 import com.mastermartini.ui.profile.ProfileViewModel
@@ -102,7 +97,11 @@ fun AppRoot() {
             }
 
             composable(Destination.Catalogo.route) {
-                CatalogoRoute()
+                CatalogoRoute(
+                    onProductoClick = { id ->
+                        nav.navigate(ProductoDetalleDestination.createRoute(id))
+                    }
+                )
             }
 
             composable(AppScreens.profileScreen.route) {
@@ -137,12 +136,16 @@ fun AppRoot() {
                     onRecetaClick = { id ->
                         nav.navigate(RecetaDetalleDestination.createRoute(id))
                     }
+                )
+            }
+
+            composable(
                 route = RecetaDetalleDestination.ROUTE,
                 arguments = listOf(
                     navArgument(RecetaDetalleDestination.ARG_RECETA_ID) {
                         type = NavType.IntType
                     }
-                )
+                ),
             ) {
                 RecetaDetalleRoute(
                     onClose = { nav.popBackStack() }
