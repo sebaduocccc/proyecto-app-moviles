@@ -15,7 +15,6 @@ class LoginViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
-
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
 
     fun onEmailChange(email: String) {
@@ -49,7 +48,11 @@ class LoginViewModel(
 
             _uiState.update {
                 if (usuario != null) {
-                    it.copy(isLoading = false, loginExitoso = true)
+                    it.copy(
+                        isLoading = false,
+                        loginExitoso = true,
+                        usuarioLogueado = usuario
+                    )
                 } else {
                     it.copy(
                         isLoading = false,
@@ -64,5 +67,4 @@ class LoginViewModel(
     fun onLoginHandled() {
         _uiState.update { LoginUiState() }
     }
-
 }

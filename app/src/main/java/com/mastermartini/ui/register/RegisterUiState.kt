@@ -1,5 +1,7 @@
 package com.mastermartini.ui.register
 
+import com.mastermartini.data.model.Roles
+import com.mastermartini.data.model.Usuario
 import java.time.LocalDate
 
 data class RegisterUiState(
@@ -10,6 +12,7 @@ data class RegisterUiState(
     val email: String = "",
     val password: String = "",
     val fechaNacimiento: LocalDate? = null,
+    val usuarioLogueado: Usuario? = null,
 
     val nombreError: String? = null,
     val apellidoError: String? = null,
@@ -23,5 +26,6 @@ data class RegisterUiState(
     val isLoading: Boolean = false,
 
     val registroExitoso: Boolean = false,
+    val rol: Roles = Roles.USUARIO
 
-)
+    )
