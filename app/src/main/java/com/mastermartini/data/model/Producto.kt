@@ -5,4 +5,6 @@ data class Producto (
     val name: String,
     val price: Int,
     val imageRes: Int,
+
+    val recetaIds: List<Int> = emptyList(),
 )

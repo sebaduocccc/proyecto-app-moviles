@@ -5,4 +5,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface ProductoRepository {
     val productos: StateFlow<List<Producto>>
+
+    fun getProducto(id: Int): Producto?
 }

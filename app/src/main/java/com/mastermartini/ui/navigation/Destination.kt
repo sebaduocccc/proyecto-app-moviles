@@ -28,6 +28,15 @@ object RecetaDetalleDestination {
     fun createRoute(id: Int) = "receta/$id"
 }
 
+object ProductoDetalleDestination {
+
+    const val ARG_PRODUCTO_ID = "productoId"
+
+    const val ROUTE = "producto/{$ARG_PRODUCTO_ID}"
+
+    fun createRoute(id: Int) = "producto/$id"
+}
+
 val bottomBarItems = listOf(
     Destination.Home, Destination.Catalogo, Destination.Profile
 )

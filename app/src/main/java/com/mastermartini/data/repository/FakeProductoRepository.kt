@@ -17,4 +17,8 @@ class FakeProductoRepository : ProductoRepository {
     )
 
     override val productos: StateFlow<List<Producto>> = _productos.asStateFlow()
+
+    override fun getProducto(id: Int): Producto? {
+        return _productos.value.find { it.id == id }
+    }
 }

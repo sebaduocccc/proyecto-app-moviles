@@ -42,6 +42,7 @@ fun CatalogoScreen(
     uiState: CatalogoUiState,
 
     onQueryChange: (String) -> Unit,
+    onProductoClick: (Int) -> Unit,
 
     modifier: Modifier = Modifier
 ) {
@@ -98,15 +99,19 @@ fun CatalogoScreen(
 
         /* Tarjetas de productos */
         items(uiState.productos, key = { it.id }) { producto ->
-            ProductoCard(producto)
+            ProductoCard(producto, onClick = { onProductoClick(producto.id) })
         }
     }
 }
 
 @Composable
-fun ProductoCard(producto: Producto) {
+fun ProductoCard(
+    producto: Producto,
+    onClick: () -> Unit,
+) {
 
     Card(
+        onClick = onClick,
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
@@ -161,6 +166,7 @@ fun CatalogoPreview() {
                 ),
             ),
             onQueryChange = {},
+            onProductoClick = {},
         )
     }
 }

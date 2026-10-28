@@ -5,36 +5,34 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mastermartini.ui.home.HomeRoute
-import com.mastermartini.ui.catalogo.CatalogoRoute
-import com.mastermartini.ui.recetadetalle.RecetaDetalleRoute
 import com.mastermartini.navigation.AppScreens
-
-
+import com.mastermartini.ui.catalogo.CatalogoRoute
+import com.mastermartini.ui.home.HomeRoute
 import com.mastermartini.ui.login.LoginRoute
-import com.mastermartini.ui.profile.ProfileScreen
-import com.mastermartini.ui.register.RegisterRoute
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mastermartini.ui.productodetalle.ProductoDetalleRoute
 import com.mastermartini.ui.profile.EditProfileRoute
+import com.mastermartini.ui.profile.ProfileRoute
 import com.mastermartini.ui.profile.ProfileViewModel
 import com.mastermartini.ui.profile.ProfileViewModelFactory
-import com.mastermartini.ui.profile.ProfileScreen
-import com.mastermartini.ui.profile.EditProfileScreen
-import com.mastermartini.ui.profile.ProfileRoute
+import com.mastermartini.ui.recetadetalle.RecetaDetalleRoute
+import com.mastermartini.ui.register.RegisterRoute
 
 @Composable
 fun AppRoot() {
     val nav = rememberNavController()
+
     val backStackEntry by nav.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+
     val showBottomBar = bottomBarItems.any { it.route == currentRoute }
+
     val profileViewModel: ProfileViewModel = viewModel(
         factory = ProfileViewModelFactory
     )
@@ -56,7 +54,13 @@ fun AppRoot() {
                 )
             }
 
-            composable(Destination.Catalogo.route) { CatalogoRoute() }
+            composable(Destination.Catalogo.route) {
+                CatalogoRoute(
+                    onProductoClick = { id ->
+                        nav.navigate(ProductoDetalleDestination.createRoute(id))
+                    }
+                )
+            }
 
             composable(AppScreens.loginScreen.route) {
                 LoginRoute(
@@ -106,6 +110,22 @@ fun AppRoot() {
                 EditProfileRoute(
                     navController = nav,
                     viewModel = profileViewModel
+                )
+            }
+
+            composable(
+                route = ProductoDetalleDestination.ROUTE,
+                arguments = listOf(
+                    navArgument(ProductoDetalleDestination.ARG_PRODUCTO_ID) {
+                        type = NavType.IntType
+                    }
+                ),
+            ) {
+                ProductoDetalleRoute(
+                    onClose = { nav.popBackStack() },
+                    onRecetaClick = { id ->
+                        nav.navigate(RecetaDetalleDestination.createRoute(id))
+                    }
                 )
             }
         }
