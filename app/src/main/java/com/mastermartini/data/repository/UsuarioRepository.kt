@@ -11,4 +11,12 @@ interface UsuarioRepository {
     suspend fun existeUsername(username: String): Boolean
 
     suspend fun registrar(usuario: Usuario): Usuario
+
+    suspend fun guardarUsuarioActual(usuarioId: Int)
+    suspend fun obtenerUsuarioActual(): Usuario?
+    suspend fun actualizarPerfil(
+        nombre: String,
+        apellido: String,
+        username: String
+    ): Usuario
 }
