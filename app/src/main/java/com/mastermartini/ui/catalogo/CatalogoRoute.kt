@@ -8,6 +8,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 
 @Composable
 fun CatalogoRoute(
+    onProductoClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 
     viewModel: CatalogoViewModel = viewModel(factory = CatalogoViewModelFactory)
@@ -18,6 +19,7 @@ fun CatalogoRoute(
         uiState = uiState,
 
         onQueryChange = viewModel::onQueryChange,
+        onProductoClick = onProductoClick,
         modifier = modifier,
     )
 }

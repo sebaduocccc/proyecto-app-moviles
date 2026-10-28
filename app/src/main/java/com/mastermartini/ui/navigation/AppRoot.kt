@@ -12,6 +12,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mastermartini.navigation.AppScreens
+import com.mastermartini.ui.catalogo.CatalogoRoute
+import com.mastermartini.ui.home.HomeRoute
+import com.mastermartini.ui.login.LoginRoute
+import com.mastermartini.ui.productodetalle.ProductoDetalleRoute
 
 import com.mastermartini.ui.catalogo.CatalogoRoute
 import com.mastermartini.ui.home.HomeRoute
@@ -26,8 +31,10 @@ import com.mastermartini.ui.register.RegisterRoute
 @Composable
 fun AppRoot() {
     val nav = rememberNavController()
+
     val backStackEntry by nav.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+
     val showBottomBar = bottomBarItems.any { it.route == currentRoute }
 
     val profileViewModel: ProfileViewModel = viewModel(
@@ -42,6 +49,21 @@ fun AppRoot() {
             startDestination = AppScreens.loginScreen.route,
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
         ) {
+            composable(Destination.Home.route) {
+                HomeRoute(
+                    onRecetaClick = { id ->
+                        nav.navigate(RecetaDetalleDestination.createRoute(id))
+                    }
+                )
+            }
+
+            composable(Destination.Catalogo.route) {
+                CatalogoRoute(
+                    onProductoClick = { id ->
+                        nav.navigate(ProductoDetalleDestination.createRoute(id))
+                    }
+                )
+            }
 
             composable(AppScreens.loginScreen.route) {
                 LoginRoute(
@@ -103,6 +125,18 @@ fun AppRoot() {
             }
 
             composable(
+                route = ProductoDetalleDestination.ROUTE,
+                arguments = listOf(
+                    navArgument(ProductoDetalleDestination.ARG_PRODUCTO_ID) {
+                        type = NavType.IntType
+                    }
+                ),
+            ) {
+                ProductoDetalleRoute(
+                    onClose = { nav.popBackStack() },
+                    onRecetaClick = { id ->
+                        nav.navigate(RecetaDetalleDestination.createRoute(id))
+                    }
                 route = RecetaDetalleDestination.ROUTE,
                 arguments = listOf(
                     navArgument(RecetaDetalleDestination.ARG_RECETA_ID) {
