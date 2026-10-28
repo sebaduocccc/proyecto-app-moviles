@@ -7,7 +7,7 @@
     "email": "admin@mastermartini.cl",
     "password": "admin",
     "fechaNacimiento": "01/01/2001",
-    "role": "admin"
+    "role": "ADMIN"
   },
   {
     "id": "2",
@@ -17,7 +17,7 @@
     "email": "vicentito@gmail.com",
     "password": "vicenteDios",
     "fechaNacimiento": "17/07/2000",
-    "role": "admin"
+    "role": "ADMIN"
   },
   {
     "id": "3",
@@ -27,7 +27,7 @@
     "email": "srbaes@gmail.com",
     "password": "rodri",
     "fechaNacimiento": "30/09/1999",
-    "role": "admin"
+    "role": "ADMIN"
   }
 
 

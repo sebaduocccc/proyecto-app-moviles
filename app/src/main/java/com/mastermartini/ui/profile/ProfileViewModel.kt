@@ -1,5 +1,6 @@
 package com.mastermartini.ui.profile
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mastermartini.data.repository.UsuarioRepository
@@ -12,6 +13,7 @@ data class ProfileUiState(
     val name: String = "",
     val lastName: String = "",
     val username: String = "",
+    val imageUri: Uri? = null,
     val isLoading: Boolean = true,
     val isSaving: Boolean = false,
     val errorMessage: String? = null
@@ -24,9 +26,6 @@ class ProfileViewModel(
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        cargarPerfil()
-    }
 //    //Pruebas locales del perfil
 //    fun cargarPerfil() {
 //        _uiState.update {
@@ -50,8 +49,9 @@ class ProfileViewModel(
 //        }
 //    }
 
-    private fun cargarPerfil() {
+    fun cargarPerfil() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 val usuario = repository.obtenerUsuarioActual()
                 if (usuario == null) {
@@ -66,6 +66,7 @@ class ProfileViewModel(
                         name = usuario.nombre,
                         lastName = usuario.apellido,
                         username = usuario.username,
+                        imageUri = usuario.imageUri?.let { uriStr -> Uri.parse(uriStr) },
                         isLoading = false
                     )
                 }
@@ -80,7 +81,14 @@ class ProfileViewModel(
         }
     }
 
-    fun guardarPerfil(name: String, lastName: String, username: String) {
+    fun cerrarSesion() {
+        viewModelScope.launch {
+            repository.cerrarSesion()
+            _uiState.value = ProfileUiState()
+        }
+    }
+
+    fun guardarPerfil(name: String, lastName: String, username: String, imageUri: Uri?) {
         viewModelScope.launch {
             _uiState.update { it.copy(isSaving = true, errorMessage = null) }
 
@@ -88,7 +96,8 @@ class ProfileViewModel(
                 repository.actualizarPerfil(
                     nombre = name.trim(),
                     apellido = lastName.trim(),
-                    username = username.trim().removePrefix("@")
+                    username = username.trim().removePrefix("@"),
+                    imageUri = imageUri?.toString()
                 )
 
                 _uiState.update {
@@ -96,6 +105,7 @@ class ProfileViewModel(
                         name = name.trim(),
                         lastName = lastName.trim(),
                         username = username.trim().removePrefix("@"),
+                        imageUri = imageUri,
                         isSaving = false
                     )
                 }

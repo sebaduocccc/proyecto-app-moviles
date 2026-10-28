@@ -1,5 +1,6 @@
 package com.mastermartini.ui.profile
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,12 +35,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.mastermartini.components.ProfileImage
-import com.mastermartini.navigation.AppScreens
+
+import com.mastermartini.ui.navigation.AppScreens
 
 
 @Composable
-fun ProfileScreen(navController: NavController,
-                  name:String,lastName:String,username:String) {
+fun ProfileScreen(
+    navController: NavController,
+    name: String,
+    lastName: String,
+    username: String,
+    imageUri: Uri? = null,
+    onLogoutClick: () -> Unit = {}
+) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
@@ -46,10 +55,10 @@ fun ProfileScreen(navController: NavController,
             name = name,
             lastName = lastName,
             username = username,
+            imageUri = imageUri,
             navController = navController,
-
+            onLogoutClick = onLogoutClick,
             modifier = Modifier.padding(innerPadding)
-
         )
     }
 }
@@ -60,7 +69,9 @@ fun ProfileContent(
     modifier: Modifier = Modifier,
     name: String,
     lastName: String,
-    username: String
+    username: String,
+    imageUri: Uri? = null,
+    onLogoutClick: () -> Unit
 ) {
     Column(
         modifier = modifier
@@ -100,7 +111,7 @@ fun ProfileContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                ProfileImage()
+                ProfileImage(imageUri = imageUri)
 
                 Text(
                     text = "$name $lastName",
@@ -121,6 +132,13 @@ fun ProfileContent(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Editar perfil")
+                }
+
+                OutlinedButton(
+                    onClick = onLogoutClick,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Cerrar sesión")
                 }
             }
         }

@@ -17,6 +17,10 @@ import com.mastermartini.ui.catalogo.CatalogoRoute
 import com.mastermartini.ui.home.HomeRoute
 import com.mastermartini.ui.login.LoginRoute
 import com.mastermartini.ui.productodetalle.ProductoDetalleRoute
+
+import com.mastermartini.ui.catalogo.CatalogoRoute
+import com.mastermartini.ui.home.HomeRoute
+import com.mastermartini.ui.login.LoginRoute
 import com.mastermartini.ui.profile.EditProfileRoute
 import com.mastermartini.ui.profile.ProfileRoute
 import com.mastermartini.ui.profile.ProfileViewModel
@@ -37,13 +41,12 @@ fun AppRoot() {
         factory = ProfileViewModelFactory
     )
 
-
     Scaffold(
         bottomBar = { if (showBottomBar) BottomBar(nav) }
     ) { padding ->
         NavHost(
-            nav,
-            startDestination = "home",
+            navController = nav,
+            startDestination = AppScreens.loginScreen.route,
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
         ) {
             composable(Destination.Home.route) {
@@ -64,45 +67,53 @@ fun AppRoot() {
 
             composable(AppScreens.loginScreen.route) {
                 LoginRoute(
-                    onLoginSuccess = {
+                    onLoginSuccess = { rol ->
                         nav.navigate(Destination.Home.route) {
                             popUpTo(AppScreens.loginScreen.route) { inclusive = true }
                         }
                     },
-                    onRegisterClick = { nav.navigate(AppScreens.registerScreen.route) }
+                    onRegisterClick = {
+                        nav.navigate(AppScreens.registerScreen.route)
+                    }
                 )
             }
+
             composable(AppScreens.registerScreen.route) {
                 RegisterRoute(
                     onRegisterSuccess = {
                         nav.navigate(Destination.Home.route) {
-                            popUpTo(AppScreens.registerScreen.route) { inclusive = true }
+                            popUpTo(AppScreens.loginScreen.route) { inclusive = true }
                             launchSingleTop = true
-
                         }
-
                     },
-                    onLoginClick = { nav.popBackStack() }
-                )
-            }
-
-
-            composable(
-                route = RecetaDetalleDestination.ROUTE,
-                arguments = listOf(
-                    navArgument(RecetaDetalleDestination.ARG_RECETA_ID) {
-                        type = NavType.IntType
+                    onLoginClick = {
+                        nav.popBackStack()
                     }
-                ),
-            ) {
-                RecetaDetalleRoute(
-                    onClose = { nav.popBackStack() }
                 )
             }
+
+
+            composable(Destination.Home.route) {
+                HomeRoute(
+                    onRecetaClick = { id ->
+                        nav.navigate(RecetaDetalleDestination.createRoute(id))
+                    }
+                )
+            }
+
+            composable(Destination.Catalogo.route) {
+                CatalogoRoute()
+            }
+
             composable(AppScreens.profileScreen.route) {
                 ProfileRoute(
                     navController = nav,
-                    viewModel = profileViewModel
+                    viewModel = profileViewModel,
+                    onLogout = {
+                        nav.navigate(AppScreens.loginScreen.route) {
+                            popUpTo(Destination.Home.route) { inclusive = true }
+                        }
+                    }
                 )
             }
 
@@ -126,6 +137,15 @@ fun AppRoot() {
                     onRecetaClick = { id ->
                         nav.navigate(RecetaDetalleDestination.createRoute(id))
                     }
+                route = RecetaDetalleDestination.ROUTE,
+                arguments = listOf(
+                    navArgument(RecetaDetalleDestination.ARG_RECETA_ID) {
+                        type = NavType.IntType
+                    }
+                )
+            ) {
+                RecetaDetalleRoute(
+                    onClose = { nav.popBackStack() }
                 )
             }
         }

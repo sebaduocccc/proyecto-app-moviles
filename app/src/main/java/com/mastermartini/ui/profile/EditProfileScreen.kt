@@ -53,7 +53,6 @@ fun EditProfileScreen(
     var editedUsername by remember { mutableStateOf(username) }
     var selectedImageUri by remember { mutableStateOf<Uri?>(currentImageUri) }
 
-    // Actualiza los campos locales solo la primera vez que la pantalla recibe datos del ViewModel
     LaunchedEffect(Unit) {
         if (editedName.isEmpty()) editedName = name
         if (editedLastName.isEmpty()) editedLastName = lastName
@@ -100,7 +99,7 @@ fun EditProfileScreen(
                     contentScale = ContentScale.Crop
                 )
             } else {
-                ProfileImage()
+                ProfileImage( imageUri = selectedImageUri)
             }
 
             TextButton(

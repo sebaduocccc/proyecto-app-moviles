@@ -52,6 +52,12 @@ class RoomUsuarioRepository(
             .apply()
     }
 
+    override suspend fun cerrarSesion() {
+        preferences.edit()
+            .remove("usuario_id")
+            .apply()
+    }
+
     private suspend fun cargarUsuariosIniciales() = mutex.withLock {
         if (dao.contar() == 0) {
             dao.insertarTodos(obtenerUsuariosDesdeAssets())
@@ -80,13 +86,13 @@ class RoomUsuarioRepository(
     override suspend fun actualizarPerfil(
         nombre: String,
         apellido: String,
-        username: String
+        username: String,
+        imageUri: String?
     ): Usuario {
         val usuario = obtenerUsuarioActual()
             ?: throw IllegalStateException("No hay un usuario autenticado")
 
         val usernameLimpio = username.trim().removePrefix("@")
-
         val usernameEnUso = existeUsername(usernameLimpio)
 
         if (usernameEnUso && usernameLimpio != usuario.username) {
@@ -96,7 +102,8 @@ class RoomUsuarioRepository(
         val actualizado = usuario.copy(
             nombre = nombre.trim(),
             apellido = apellido.trim(),
-            username = usernameLimpio
+            username = usernameLimpio,
+            imageUri = imageUri
         )
 
         dao.actualizar(actualizado)

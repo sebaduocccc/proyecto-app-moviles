@@ -14,9 +14,11 @@ interface UsuarioRepository {
 
     suspend fun guardarUsuarioActual(usuarioId: Int)
     suspend fun obtenerUsuarioActual(): Usuario?
+    suspend fun cerrarSesion()
     suspend fun actualizarPerfil(
         nombre: String,
         apellido: String,
-        username: String
+        username: String,
+        imageUri: String?
     ): Usuario
 }
