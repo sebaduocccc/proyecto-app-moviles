@@ -29,7 +29,8 @@ class FakeRecetaRepository : RecetaRepository {
                     Paso("Haz la mezcla"),
                     Paso("Calienta la mezcla"),
                     Paso("Come :9")
-                )
+                ),
+                videoId = "dQw4w9WgXcQ",
             ),
             Receta(
                 2,
