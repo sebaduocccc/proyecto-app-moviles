@@ -2,6 +2,7 @@ package com.mastermartini.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastermartini.data.model.Roles
 import com.mastermartini.data.model.Usuario
 import com.mastermartini.data.repository.UsuarioRepository
 import com.mastermartini.validation.FormValidator
@@ -18,7 +19,6 @@ class RegisterViewModel(
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(RegisterUiState())
-
     val uiState: StateFlow<RegisterUiState> = _uiState.asStateFlow()
 
     private val dateFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy")
@@ -47,6 +47,10 @@ class RegisterViewModel(
         _uiState.update { it.copy(fechaNacimiento = fecha, fechaNacimientoError = null, errorMessage = null) }
     }
 
+    fun onRolChange(nuevoRol: Roles) {
+        _uiState.update { it.copy(rol = nuevoRol, errorMessage = null) }
+    }
+
     fun onRegisterClick() {
         val state = _uiState.value
         val validado = state.copy(
@@ -55,7 +59,7 @@ class RegisterViewModel(
             usernameError = FormValidator.validarUsername(state.username),
             emailError = FormValidator.validarEmail(state.email),
             passwordError = FormValidator.validarPasswordRegistro(state.password),
-            fechaNacimientoError = FormValidator.validarFechaNacimiento(state.fechaNacimiento),
+            fechaNacimientoError = FormValidator.validarFechaNacimiento(state.fechaNacimiento)
         )
 
         if (validado.tieneErrores()) {
@@ -85,6 +89,7 @@ class RegisterViewModel(
                         email = state.email.trim().lowercase(),
                         password = state.password,
                         fechaNacimiento = state.fechaNacimiento!!.format(dateFormatter),
+                        role = state.rol
                     )
                 )
                 _uiState.update { it.copy(isLoading = false, registroExitoso = true) }
@@ -103,5 +108,4 @@ class RegisterViewModel(
     private fun RegisterUiState.tieneErrores(): Boolean = listOf(
         nombreError, apellidoError, usernameError, emailError, passwordError, fechaNacimientoError
     ).any { it != null }
-
 }
