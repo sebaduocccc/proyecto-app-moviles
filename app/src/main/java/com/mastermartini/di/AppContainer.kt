@@ -12,13 +12,10 @@ import com.mastermartini.data.repository.UsuarioRepository
 
 class AppContainer(context: Context) {
 
-    private val database: AppDatabase by lazy {
+    private val database: AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, "master_martini.db").build()
-    }
 
     val recetaRepository: RecetaRepository = FakeRecetaRepository()
     val productoRepository: ProductoRepository = FakeProductoRepository()
-    val usuarioRepository: UsuarioRepository by lazy {
-        RoomUsuarioRepository(context, database.usuarioDao())
-    }
+    val usuarioRepository: UsuarioRepository = RoomUsuarioRepository(context, database.usuarioDao())
 }

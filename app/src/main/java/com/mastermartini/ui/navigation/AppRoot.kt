@@ -1,33 +1,27 @@
 package com.mastermartini.ui.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.mastermartini.ui.home.HomeRoute
-import com.mastermartini.ui.catalogo.CatalogoRoute
-import com.mastermartini.ui.recetadetalle.RecetaDetalleRoute
-import com.mastermartini.navigation.AppScreens
-
-
-import com.mastermartini.ui.login.LoginRoute
-import com.mastermartini.ui.profile.ProfileScreen
-import com.mastermartini.ui.register.RegisterRoute
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.mastermartini.ui.catalogo.CatalogoRoute
+import com.mastermartini.ui.home.HomeRoute
+import com.mastermartini.ui.login.LoginRoute
 import com.mastermartini.ui.profile.EditProfileRoute
+import com.mastermartini.ui.profile.ProfileRoute
 import com.mastermartini.ui.profile.ProfileViewModel
 import com.mastermartini.ui.profile.ProfileViewModelFactory
-import com.mastermartini.ui.profile.ProfileScreen
-import com.mastermartini.ui.profile.EditProfileScreen
-import com.mastermartini.ui.profile.ProfileRoute
+import com.mastermartini.ui.recetadetalle.RecetaDetalleRoute
+import com.mastermartini.ui.register.RegisterRoute
 
 @Composable
 fun AppRoot() {
@@ -45,18 +39,19 @@ fun AppRoot() {
     ) { padding ->
         NavHost(
             nav,
-            startDestination = "home",
+            startDestination = AppScreens.loginScreen.route,
             modifier = Modifier.padding(bottom = padding.calculateBottomPadding())
         ) {
             composable(Destination.Home.route) {
                 HomeRoute(
                     onRecetaClick = { id ->
                         nav.navigate(RecetaDetalleDestination.createRoute(id))
-                    }
+                    },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
 
-            composable(Destination.Catalogo.route) { CatalogoRoute() }
+            composable(Destination.Catalogo.route) { CatalogoRoute(modifier = Modifier.statusBarsPadding()) }
 
             composable(AppScreens.loginScreen.route) {
                 LoginRoute(
@@ -65,20 +60,19 @@ fun AppRoot() {
                             popUpTo(AppScreens.loginScreen.route) { inclusive = true }
                         }
                     },
-                    onRegisterClick = { nav.navigate(AppScreens.registerScreen.route) }
+                    onRegisterClick = { nav.navigate(AppScreens.registerScreen.route) },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
             composable(AppScreens.registerScreen.route) {
                 RegisterRoute(
                     onRegisterSuccess = {
                         nav.navigate(Destination.Home.route) {
-                            popUpTo(AppScreens.registerScreen.route) { inclusive = true }
-                            launchSingleTop = true
-
+                            popUpTo(AppScreens.loginScreen.route) { inclusive = true }
                         }
-
                     },
-                    onLoginClick = { nav.popBackStack() }
+                    onLoginClick = { nav.popBackStack() },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
 
@@ -95,10 +89,15 @@ fun AppRoot() {
                     onClose = { nav.popBackStack() }
                 )
             }
-            composable(AppScreens.profileScreen.route) {
+            composable(Destination.Profile.route) {
                 ProfileRoute(
                     navController = nav,
-                    viewModel = profileViewModel
+                    viewModel = profileViewModel,
+                    onLogout = {
+                        nav.navigate(AppScreens.loginScreen.route) {
+                            popUpTo(nav.graph.id) { inclusive = true }
+                        }
+                    }
                 )
             }
 

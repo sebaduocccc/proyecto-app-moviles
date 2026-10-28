@@ -52,6 +52,12 @@ class RoomUsuarioRepository(
             .apply()
     }
 
+    override suspend fun cerrarSesion() {
+        preferences.edit()
+            .remove("usuario_id")
+            .apply()
+    }
+
     private suspend fun cargarUsuariosIniciales() = mutex.withLock {
         if (dao.contar() == 0) {
             dao.insertarTodos(obtenerUsuariosDesdeAssets())
