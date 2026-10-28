@@ -24,9 +24,6 @@ class ProfileViewModel(
     private val _uiState = MutableStateFlow(ProfileUiState())
     val uiState = _uiState.asStateFlow()
 
-    init {
-        cargarPerfil()
-    }
 //    //Pruebas locales del perfil
 //    fun cargarPerfil() {
 //        _uiState.update {
@@ -50,8 +47,9 @@ class ProfileViewModel(
 //        }
 //    }
 
-    private fun cargarPerfil() {
+    fun cargarPerfil() {
         viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
                 val usuario = repository.obtenerUsuarioActual()
                 if (usuario == null) {
@@ -77,6 +75,13 @@ class ProfileViewModel(
                     )
                 }
             }
+        }
+    }
+
+    fun cerrarSesion() {
+        viewModelScope.launch {
+            repository.cerrarSesion()
+            _uiState.value = ProfileUiState()
         }
     }
 

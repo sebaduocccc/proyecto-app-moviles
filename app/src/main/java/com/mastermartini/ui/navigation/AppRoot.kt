@@ -1,6 +1,7 @@
 package com.mastermartini.ui.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -88,7 +89,12 @@ fun AppRoot() {
             composable(AppScreens.profileScreen.route) {
                 ProfileRoute(
                     navController = nav,
-                    viewModel = profileViewModel
+                    viewModel = profileViewModel,
+                    onLogout = {
+                        nav.navigate(AppScreens.loginScreen.route) {
+                            popUpTo(nav.graph.id) { inclusive = true }
+                        }
+                    }
                 )
             }
 
