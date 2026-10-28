@@ -24,6 +24,7 @@ fun ProfileRoute(
         name = state.name,
         lastName = state.lastName,
         username = state.username,
+        imageUri = state.imageUri,
         onLogoutClick = {
             viewModel.cerrarSesion()
             onLogout()

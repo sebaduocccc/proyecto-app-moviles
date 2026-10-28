@@ -13,7 +13,8 @@ import com.mastermartini.data.repository.UsuarioRepository
 class AppContainer(context: Context) {
 
     private val database: AppDatabase =
-        Room.databaseBuilder(context, AppDatabase::class.java, "master_martini.db").build()
+        Room.databaseBuilder(context, AppDatabase::class.java, "master_martini.db")
+            .fallbackToDestructiveMigration(true).build()
 
     val recetaRepository: RecetaRepository = FakeRecetaRepository()
     val productoRepository: ProductoRepository = FakeProductoRepository()

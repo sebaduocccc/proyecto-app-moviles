@@ -19,5 +19,6 @@ data class Usuario(
     val email: String,
     val password: String,
     val fechaNacimiento: String,
-    val role: Roles = Roles.USUARIO
+    val role: Roles = Roles.USUARIO,
+    val imageUri: String? = null
 )
