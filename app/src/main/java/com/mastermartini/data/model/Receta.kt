@@ -9,4 +9,6 @@ data class Receta(
     val tiempoMin: Int, /*Tiempo en minutos*/
     val ingredientes: List<String>,
     val pasos: List<Paso>, /*Pasos de la receta*/
+
+    val videoId: String? = null,
 )
