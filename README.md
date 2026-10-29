@@ -81,7 +81,6 @@ Las reglas están en `validation/FormValidator.kt`, separadas de las pantallas, 
 | Recurso | Para qué se usa |
 |---|---|
 | **Galería de fotos** | Elegir la foto de perfil. Usa el selector de fotos de Android, que no necesita permisos. |
-| _Por definir_ | _Por completar_ |
 
 ## Cómo ejecutar
 
