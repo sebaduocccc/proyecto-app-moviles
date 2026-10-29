@@ -4,7 +4,7 @@ Aplicación móvil para **Master Martini Chile**, empresa que vende insumos para
 
 La app reúne en un solo lugar recetas, videos técnicos y el catálogo de productos de la marca, para que los clientes aprendan a usar los insumos y la empresa mantenga una relación más cercana con ellos.
 
-> Prototipo académico desarrollado para la asignatura **DSY1105 Desarrollo de Aplicaciones Móviles** (Duoc UC).
+> Prototipo desarrollado para **Desarrollo de Aplicaciones Móviles** (Duoc UC).
 
 ## Integrantes
 
@@ -14,7 +14,7 @@ La app reúne en un solo lugar recetas, videos técnicos y el catálogo de produ
 | _Sebastián Saavedra_ | _Usuarios y Administración_ |
 | _Cristóbal Spínola_ | _Perfiles de Usuario y sus Roles_ |
 
-Equipo N° _X_
+Equipo N° _6_
 
 ## Funcionalidades
 
