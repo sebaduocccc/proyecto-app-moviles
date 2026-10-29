@@ -56,4 +56,61 @@ object FormValidator {
         Period.between(fecha, hoy).years < EDAD_MINIMA -> "Debes tener al menos $EDAD_MINIMA años"
         else -> null
     }
+
+    private val videoIdRegex = Regex("^[A-Za-z0-9_-]{11}$")
+
+    fun validarTituloReceta(valor: String): String? {
+        val texto = valor.trim()
+        return when {
+            texto.isEmpty() -> "Ingresa un título"
+            texto.length < 3 -> "Mínimo 3 caracteres"
+            texto.length > 60 -> "Máximo 60 caracteres"
+            else -> null
+        }
+    }
+
+    fun validarTiempoMin(valor: String): String? {
+        val minutos = valor.trim().toIntOrNull()
+        return when {
+            valor.isBlank() -> "Ingresa el tiempo de preparación"
+            minutos == null -> "Solo números"
+            minutos !in 1..1440 -> "Debe estar entre 1 y 1440 minutos"
+            else -> null
+        }
+    }
+
+    fun validarImagen(uri: String?): String? =
+        if (uri.isNullOrBlank()) "Selecciona una imagen" else null
+
+    fun validarVideoId(valor: String): String? {
+        val texto = valor.trim()
+        return if (texto.isEmpty() || videoIdRegex.matches(texto)) null
+        else "ID de YouTube no válido"
+    }
+
+    fun validarIngredientes(lista: List<String>): String? =
+        if (lista.isEmpty()) "Agrega al menos un ingrediente" else null
+
+    fun validarPasos(lista: List<*>): String? =
+        if (lista.isEmpty()) "Agrega al menos un paso" else null
+
+    fun validarPrecio(valor: String): String? {
+        val precio = valor.trim().toIntOrNull()
+        return when {
+            valor.isBlank() -> "Ingresa un precio"
+            precio == null -> "Solo números enteros"
+            precio !in 0..10_000_000 -> "Debe estar entre 0 y 10.000.000"
+            else -> null
+        }
+    }
+
+    fun validarNombreProducto(valor: String): String? {
+        val texto = valor.trim()
+        return when {
+            texto.isEmpty() -> "Ingresa un nombre"
+            texto.length < 2 -> "Mínimo 2 caracteres"
+            texto.length > 40 -> "Máximo 40 caracteres"
+            else -> null
+        }
+    }
 }

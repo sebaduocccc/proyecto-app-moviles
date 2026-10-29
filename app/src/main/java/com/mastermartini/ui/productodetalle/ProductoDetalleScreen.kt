@@ -30,16 +30,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.mastermartini.data.model.Producto
 import com.mastermartini.data.model.Receta
 import com.mastermartini.ui.theme.Background
 import com.mastermartini.ui.theme.MasterMartiniTheme
-import com.mastermartini.R
 import com.mastermartini.ui.home.RecetaCard
 import com.mastermartini.ui.theme.RecetaTextSoft
 
@@ -114,8 +113,8 @@ private fun ProductoDetalleContent(
 private fun Header(producto: Producto, onClose: () -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()) {
 
-        Image(
-            painter = painterResource(producto.imageRes),
+        AsyncImage(
+            model = producto.imageUri,
             contentDescription = producto.name,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -185,13 +184,13 @@ fun ProductoDetallePreview() {
         ProductoDetalleScreen(
             uiState = ProductoDetalleUiState(
                 isLoading = false,
-                producto = Producto(1, "Chocolate", 0, R.drawable.pastelchocolate),
+                producto = Producto(1, "Chocolate", 0, null),
                 recetas = listOf(
                     Receta(
                         1,
                         "Pastel Chocolate",
                         "Master Martini",
-                        R.drawable.pastelchocolate,
+                        null,
                         60,
                         emptyList(),
                         emptyList(),

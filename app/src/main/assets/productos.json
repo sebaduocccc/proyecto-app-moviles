@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Chocolate",
+    "price": 0,
+    "imageUri": "android.resource://com.mastermartini/drawable/pastelchocolate",
+    "recetaIds": [1]
+  },
+  {
+    "id": 2,
+    "name": "Crema",
+    "price": 0,
+    "imageUri": "android.resource://com.mastermartini/drawable/pastelcrema",
+    "recetaIds": [2]
+  },
+  {
+    "id": 3,
+    "name": "Caramelo",
+    "price": 0,
+    "imageUri": "android.resource://com.mastermartini/drawable/donuts",
+    "recetaIds": [3]
+  }
+]

@@ -2,20 +2,22 @@ package com.mastermartini.ui.productodetalle
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mastermartini.data.repository.ProductoRepository
 import com.mastermartini.data.repository.RecetaRepository
 import com.mastermartini.ui.navigation.ProductoDetalleDestination
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class ProductoDetalleViewModel (
 
     savedStateHandle: SavedStateHandle,
 
-    productoRepository: ProductoRepository,
+    private val productoRepository: ProductoRepository,
 
-    recetaRepository: RecetaRepository,
+    private val recetaRepository: RecetaRepository,
 
 ) : ViewModel() {
 
@@ -26,17 +28,16 @@ class ProductoDetalleViewModel (
     private val productoId: Int = checkNotNull(savedStateHandle[ProductoDetalleDestination.ARG_PRODUCTO_ID])
 
     init {
-        val producto = productoRepository.getProducto(productoId)
+        viewModelScope.launch {
+            val producto = productoRepository.getProducto(productoId)
 
-        val recetas = producto?.recetaIds.orEmpty().mapNotNull { id ->
-            recetaRepository.getReceta(id)
+            val recetas = recetaRepository.getRecetas(producto?.recetaIds.orEmpty())
+
+            _uiState.value = ProductoDetalleUiState(
+                isLoading = false,
+                producto = producto,
+                recetas = recetas,
+            )
         }
-
-        _uiState.value = ProductoDetalleUiState(
-            isLoading = false,
-            producto = producto,
-            recetas = recetas,
-        )
     }
-
 }

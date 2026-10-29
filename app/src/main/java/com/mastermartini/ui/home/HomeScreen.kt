@@ -32,10 +32,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.mastermartini.R
 import com.mastermartini.data.model.Receta
 import com.mastermartini.ui.theme.MasterMartiniTheme
@@ -112,16 +112,15 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Categoría",
+                    text = "Recetas",
                     fontSize = 20.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-                Text("Ver todos", color = MaterialTheme.colorScheme.onBackground)
             }
         }
 
-        /* Botones de categorías */
+        /* Botones de categorías *//*
         item {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -158,7 +157,7 @@ fun HomeScreen(
                     )
                 }
             }
-        }
+        }*/
 
         /* Tarjetas de recetas */
         items(uiState.recetas, key = { it.id }) { receta ->
@@ -181,8 +180,8 @@ fun RecetaCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
     ) {
         Column {
-            Image(
-                painter = painterResource(receta.imageRes),
+            AsyncImage(
+                model = receta.imageUri,
                 contentDescription = receta.title,
                 contentScale = ContentScale.Crop,
 
@@ -228,7 +227,7 @@ fun HomePreview() {
                         1,
                         "Pastel Chocolate",
                         "Master Martini",
-                        R.drawable.pastelchocolate,
+                        null,
                         60,
                         emptyList(),
                         emptyList(),

@@ -1,6 +1,5 @@
 package com.mastermartini.ui.recetadetalle
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,12 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.mastermartini.R
+import coil.compose.AsyncImage
 import com.mastermartini.data.model.Paso
 import com.mastermartini.data.model.Receta
 import com.mastermartini.ui.theme.Background
@@ -109,8 +107,8 @@ private fun RecetaDetalleContent(
 private fun Header(receta: Receta, onClose: () -> Unit) {
     Box(modifier = Modifier.fillMaxWidth()) {
 
-        Image(
-            painter = painterResource(receta.imageRes),
+        AsyncImage(
+            model = receta.imageUri,
             contentDescription = receta.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -241,9 +239,9 @@ private fun PasoItem(numero: Int, paso: Paso) {
             text = paso.texto,
             color = MaterialTheme.colorScheme.onBackground,
         )
-        paso.imageRes?.let { imageRes ->
-            Image(
-                painter = painterResource(imageRes),
+        paso.imageUri?.let { imageUri ->
+            AsyncImage(
+                model = imageUri,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -266,7 +264,7 @@ fun RecetaDetallePreview() {
                     1,
                     "Pastel Chocolate",
                     "Master Martini",
-                    R.drawable.pastelchocolate,
+                    null,
                     60,
                     listOf("200g de chocolate", "huevos", "harina"),
                     listOf(

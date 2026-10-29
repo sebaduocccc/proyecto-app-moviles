@@ -3,10 +3,11 @@ package com.mastermartini.di
 import android.content.Context
 import androidx.room.Room
 import com.mastermartini.data.local.AppDatabase
-import com.mastermartini.data.repository.FakeProductoRepository
-import com.mastermartini.data.repository.FakeRecetaRepository
+import com.mastermartini.data.local.ImageStorage
 import com.mastermartini.data.repository.ProductoRepository
 import com.mastermartini.data.repository.RecetaRepository
+import com.mastermartini.data.repository.RoomProductoRepository
+import com.mastermartini.data.repository.RoomRecetaRepository
 import com.mastermartini.data.repository.RoomUsuarioRepository
 import com.mastermartini.data.repository.UsuarioRepository
 
@@ -16,7 +17,12 @@ class AppContainer(context: Context) {
         Room.databaseBuilder(context, AppDatabase::class.java, "master_martini.db")
             .fallbackToDestructiveMigration(true).build()
 
-    val recetaRepository: RecetaRepository = FakeRecetaRepository()
-    val productoRepository: ProductoRepository = FakeProductoRepository()
-    val usuarioRepository: UsuarioRepository = RoomUsuarioRepository(context, database.usuarioDao())
+    private val imageStorage = ImageStorage(context)
+
+    val recetaRepository: RecetaRepository =
+        RoomRecetaRepository(context, database.recetaDao(), imageStorage)
+    val productoRepository: ProductoRepository =
+        RoomProductoRepository(context, database.productoDao(), imageStorage)
+    val usuarioRepository: UsuarioRepository =
+        RoomUsuarioRepository(context, database.usuarioDao())
 }
