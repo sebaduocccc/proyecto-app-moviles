@@ -13,6 +13,11 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mastermartini.ui.admin.AdminHubScreen
+import com.mastermartini.ui.admin.AdminProductoFormRoute
+import com.mastermartini.ui.admin.AdminProductosRoute
+import com.mastermartini.ui.admin.AdminRecetaFormRoute
+import com.mastermartini.ui.admin.AdminRecetasRoute
 import com.mastermartini.ui.admin.AdminUsuarioFormRoute
 import com.mastermartini.ui.admin.AdminUsuariosRoute
 import com.mastermartini.ui.catalogo.CatalogoRoute
@@ -104,8 +109,67 @@ fun AppRoot() {
                         }
                     },
                     onAdminClick = {
-                        nav.navigate(AdminUsuariosDestination.ROUTE)
+                        nav.navigate(AdminHubDestination.ROUTE)
                     }
+                )
+            }
+
+            composable(AdminHubDestination.ROUTE) {
+                AdminHubScreen(
+                    onBack = { nav.popBackStack() },
+                    onUsuariosClick = { nav.navigate(AdminUsuariosDestination.ROUTE) },
+                    onRecetasClick = { nav.navigate(AdminRecetasDestination.ROUTE) },
+                    onProductosClick = { nav.navigate(AdminProductosDestination.ROUTE) }
+                )
+            }
+
+            composable(AdminRecetasDestination.ROUTE) {
+                AdminRecetasRoute(
+                    onBack = { nav.popBackStack() },
+                    onNuevaReceta = {
+                        nav.navigate(AdminRecetaFormDestination.createRoute())
+                    },
+                    onEditarReceta = { id ->
+                        nav.navigate(AdminRecetaFormDestination.createRoute(id))
+                    }
+                )
+            }
+
+            composable(
+                route = AdminRecetaFormDestination.ROUTE,
+                arguments = listOf(
+                    navArgument(AdminRecetaFormDestination.ARG_RECETA_ID) {
+                        type = NavType.IntType
+                    }
+                ),
+            ) {
+                AdminRecetaFormRoute(
+                    onClose = { nav.popBackStack() }
+                )
+            }
+
+            composable(AdminProductosDestination.ROUTE) {
+                AdminProductosRoute(
+                    onBack = { nav.popBackStack() },
+                    onNuevoProducto = {
+                        nav.navigate(AdminProductoFormDestination.createRoute())
+                    },
+                    onEditarProducto = { id ->
+                        nav.navigate(AdminProductoFormDestination.createRoute(id))
+                    }
+                )
+            }
+
+            composable(
+                route = AdminProductoFormDestination.ROUTE,
+                arguments = listOf(
+                    navArgument(AdminProductoFormDestination.ARG_PRODUCTO_ID) {
+                        type = NavType.IntType
+                    }
+                ),
+            ) {
+                AdminProductoFormRoute(
+                    onClose = { nav.popBackStack() }
                 )
             }
 

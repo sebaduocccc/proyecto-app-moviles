@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "title": "Pastel Chocolate",
+    "author": "Master Martini",
+    "imageUri": "android.resource://com.mastermartini/drawable/pastelchocolate",
+    "tiempoMin": 60,
+    "ingredientes": ["200 g de chocolate Master Martini", "Huevos", "Harina", "Azúcar"],
+    "pasos": [
+      { "texto": "Precalienta el horno" },
+      { "texto": "Prepara los ingredientes" },
+      { "texto": "Prepara la mezcla" },
+      { "texto": "Hornea la mezcla" },
+      { "texto": "Dejar enfriar y servir" }
+    ],
+    "videoId": "C1HaDB9US_Y"
+  },
+  {
+    "id": 2,
+    "title": "Pastel Crema",
+    "author": "Master Martini",
+    "imageUri": "android.resource://com.mastermartini/drawable/pastelcrema",
+    "tiempoMin": 60,
+    "ingredientes": ["200 g de chocolate Master Martini", "Huevos", "Harina", "Azúcar"],
+    "pasos": [
+      { "texto": "Precalienta el horno" },
+      { "texto": "Prepara los ingredientes" },
+      { "texto": "Prepara la mezcla" },
+      { "texto": "Hornea la mezcla" },
+      { "texto": "Dejar enfriar y servir" }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Donuts",
+    "author": "Master Martini",
+    "imageUri": "android.resource://com.mastermartini/drawable/donuts",
+    "tiempoMin": 60,
+    "ingredientes": ["200 g de chocolate Master Martini", "Huevos", "Harina", "Azúcar"],
+    "pasos": [
+      { "texto": "Precalienta el horno" },
+      { "texto": "Prepara los ingredientes" },
+      { "texto": "Prepara la mezcla" },
+      { "texto": "Hornea la mezcla" },
+      { "texto": "Dejar enfriar y servir" }
+    ]
+  }
+]

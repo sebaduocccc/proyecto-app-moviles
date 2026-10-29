@@ -32,6 +32,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.mastermartini.R
 import com.mastermartini.data.model.Producto
 import com.mastermartini.ui.theme.MasterMartiniTheme
@@ -97,6 +98,22 @@ fun CatalogoScreen(
             )
         }
 
+        item {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Productos",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+
         /* Tarjetas de productos */
         items(uiState.productos, key = { it.id }) { producto ->
             ProductoCard(producto, onClick = { onProductoClick(producto.id) })
@@ -123,8 +140,8 @@ fun ProductoCard(
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Image(
-                painter = painterResource(producto.imageRes),
+            AsyncImage(
+                model = producto.imageUri,
                 contentDescription = producto.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -162,7 +179,7 @@ fun CatalogoPreview() {
             uiState = CatalogoUiState(
                 isLoading = false,
                 productos = listOf(
-                    Producto(1, "Chocolate", 0, R.drawable.pastelchocolate)
+                    Producto(1, "Chocolate", 0, null)
                 ),
             ),
             onQueryChange = {},

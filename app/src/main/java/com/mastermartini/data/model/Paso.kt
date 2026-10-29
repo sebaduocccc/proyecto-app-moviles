@@ -5,5 +5,5 @@ package com.mastermartini.data.model
 data class Paso (
     val texto: String,
 
-    val imageRes: Int? = null,
+    val imageUri: String? = null,
 )
