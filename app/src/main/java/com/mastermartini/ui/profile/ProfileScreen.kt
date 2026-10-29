@@ -11,6 +11,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.FilledTonalButton
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AdminPanelSettings
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -46,6 +52,8 @@ fun ProfileScreen(
     lastName: String,
     username: String,
     imageUri: Uri? = null,
+    esAdmin: Boolean = false,
+    onAdminClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {}
 ) {
     Scaffold(
@@ -56,6 +64,8 @@ fun ProfileScreen(
             lastName = lastName,
             username = username,
             imageUri = imageUri,
+            esAdmin = esAdmin,
+            onAdminClick = onAdminClick,
             navController = navController,
             onLogoutClick = onLogoutClick,
             modifier = Modifier.padding(innerPadding)
@@ -71,6 +81,8 @@ fun ProfileContent(
     lastName: String,
     username: String,
     imageUri: Uri? = null,
+    esAdmin: Boolean = false,
+    onAdminClick: () -> Unit = {},
     onLogoutClick: () -> Unit
 ) {
     Column(
@@ -132,6 +144,17 @@ fun ProfileContent(
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text("Editar perfil")
+                }
+
+                if (esAdmin) {
+                    FilledTonalButton(
+                        onClick = onAdminClick,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Icon(Icons.Default.AdminPanelSettings, contentDescription = null)
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Panel de administración")
+                    }
                 }
 
                 OutlinedButton(

@@ -16,19 +16,10 @@ import androidx.compose.material.icons.filled.AlternateEmail
 import androidx.compose.material.icons.filled.Badge
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuBox
-import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -42,11 +33,9 @@ import com.mastermartini.components.FormTextField
 import com.mastermartini.components.LoadingButton
 import com.mastermartini.components.LogoImage
 import com.mastermartini.components.PasswordField
-import com.mastermartini.data.model.Roles
 import com.mastermartini.ui.theme.MasterMartiniTheme
 import java.time.LocalDate
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegisterScreen(
     uiState: RegisterUiState,
@@ -56,13 +45,10 @@ fun RegisterScreen(
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onFechaNacimientoChange: (LocalDate) -> Unit,
-    onRolChange: (Roles) -> Unit,
     onRegisterClick: () -> Unit,
     onLoginClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var expanded by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -141,35 +127,6 @@ fun RegisterScreen(
                 onDateSelected = onFechaNacimientoChange,
                 error = uiState.fechaNacimientoError
             )
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = { expanded = !expanded }
-            ) {
-                OutlinedTextField(
-                    value = uiState.rol.displayName,
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Tipo de usuario / Rol") },
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier
-                        .menuAnchor()
-                        .fillMaxWidth()
-                )
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    Roles.entries.forEach { rolOption ->
-                        DropdownMenuItem(
-                            text = { Text(rolOption.displayName) },
-                            onClick = {
-                                onRolChange(rolOption)
-                                expanded = false
-                            }
-                        )
-                    }
-                }
-            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -208,7 +165,6 @@ fun RegisterPreview() {
             onFechaNacimientoChange = {},
             onRegisterClick = {},
             onLoginClick = {},
-            onRolChange = {},
             modifier = Modifier
         )
     }

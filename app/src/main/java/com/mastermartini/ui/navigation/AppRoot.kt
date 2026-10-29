@@ -1,6 +1,7 @@
 package com.mastermartini.ui.navigation
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,6 +13,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.mastermartini.ui.admin.AdminUsuarioFormRoute
+import com.mastermartini.ui.admin.AdminUsuariosRoute
 import com.mastermartini.ui.catalogo.CatalogoRoute
 import com.mastermartini.ui.home.HomeRoute
 import com.mastermartini.ui.login.LoginRoute
@@ -48,7 +51,8 @@ fun AppRoot() {
                 HomeRoute(
                     onRecetaClick = { id ->
                         nav.navigate(RecetaDetalleDestination.createRoute(id))
-                    }
+                    },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
 
@@ -56,20 +60,22 @@ fun AppRoot() {
                 CatalogoRoute(
                     onProductoClick = { id ->
                         nav.navigate(ProductoDetalleDestination.createRoute(id))
-                    }
+                    },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
 
             composable(AppScreens.loginScreen.route) {
                 LoginRoute(
-                    onLoginSuccess = { rol ->
+                    onLoginSuccess = { _ ->
                         nav.navigate(Destination.Home.route) {
                             popUpTo(AppScreens.loginScreen.route) { inclusive = true }
                         }
                     },
                     onRegisterClick = {
                         nav.navigate(AppScreens.registerScreen.route)
-                    }
+                    },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
 
@@ -83,36 +89,48 @@ fun AppRoot() {
                     },
                     onLoginClick = {
                         nav.popBackStack()
-                    }
+                    },
+                    modifier = Modifier.statusBarsPadding()
                 )
             }
 
-
-            composable(Destination.Home.route) {
-                HomeRoute(
-                    onRecetaClick = { id ->
-                        nav.navigate(RecetaDetalleDestination.createRoute(id))
-                    }
-                )
-            }
-
-            composable(Destination.Catalogo.route) {
-                CatalogoRoute(
-                    onProductoClick = { id ->
-                        nav.navigate(ProductoDetalleDestination.createRoute(id))
-                    }
-                )
-            }
-
-            composable(AppScreens.profileScreen.route) {
+            composable(Destination.Profile.route) {
                 ProfileRoute(
                     navController = nav,
                     viewModel = profileViewModel,
                     onLogout = {
                         nav.navigate(AppScreens.loginScreen.route) {
-                            popUpTo(Destination.Home.route) { inclusive = true }
+                            popUpTo(nav.graph.id) { inclusive = true }
                         }
+                    },
+                    onAdminClick = {
+                        nav.navigate(AdminUsuariosDestination.ROUTE)
                     }
+                )
+            }
+
+            composable(AdminUsuariosDestination.ROUTE) {
+                AdminUsuariosRoute(
+                    onBack = { nav.popBackStack() },
+                    onNuevoUsuario = {
+                        nav.navigate(AdminUsuarioFormDestination.createRoute())
+                    },
+                    onEditarUsuario = { id ->
+                        nav.navigate(AdminUsuarioFormDestination.createRoute(id))
+                    }
+                )
+            }
+
+            composable(
+                route = AdminUsuarioFormDestination.ROUTE,
+                arguments = listOf(
+                    navArgument(AdminUsuarioFormDestination.ARG_USUARIO_ID) {
+                        type = NavType.IntType
+                    }
+                ),
+            ) {
+                AdminUsuarioFormRoute(
+                    onClose = { nav.popBackStack() }
                 )
             }
 

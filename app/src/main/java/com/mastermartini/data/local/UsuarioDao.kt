@@ -1,11 +1,13 @@
 package com.mastermartini.data.local
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.mastermartini.data.model.Usuario
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UsuarioDao {
@@ -18,6 +20,12 @@ interface UsuarioDao {
 
     @Update
     suspend fun actualizar(usuario: Usuario)
+
+    @Delete
+    suspend fun eliminar(usuario: Usuario)
+
+    @Query("SELECT * FROM usuarios ORDER BY role, nombre")
+    fun observarTodos(): Flow<List<Usuario>>
 
     @Query("SELECT COUNT(*) FROM usuarios")
     suspend fun contar(): Int

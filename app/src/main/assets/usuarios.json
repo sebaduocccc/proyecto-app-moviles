@@ -17,7 +17,7 @@
     "email": "vicentito@gmail.com",
     "password": "vicenteDios",
     "fechaNacimiento": "17/07/2000",
-    "role": "ADMIN"
+    "role": "USUARIO"
   },
   {
     "id": "3",
@@ -27,7 +27,7 @@
     "email": "srbaes@gmail.com",
     "password": "rodri",
     "fechaNacimiento": "30/09/1999",
-    "role": "ADMIN"
+    "role": "USUARIO"
   }
 
 

@@ -2,7 +2,6 @@ package com.mastermartini.ui.register
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mastermartini.data.model.Roles
 import com.mastermartini.data.model.Usuario
 import com.mastermartini.data.repository.UsuarioRepository
 import com.mastermartini.validation.FormValidator
@@ -47,10 +46,6 @@ class RegisterViewModel(
         _uiState.update { it.copy(fechaNacimiento = fecha, fechaNacimientoError = null, errorMessage = null) }
     }
 
-    fun onRolChange(nuevoRol: Roles) {
-        _uiState.update { it.copy(rol = nuevoRol, errorMessage = null) }
-    }
-
     fun onRegisterClick() {
         val state = _uiState.value
         val validado = state.copy(
@@ -89,7 +84,6 @@ class RegisterViewModel(
                         email = state.email.trim().lowercase(),
                         password = state.password,
                         fechaNacimiento = state.fechaNacimiento!!.format(dateFormatter),
-                        role = state.rol
                     )
                 )
                 _uiState.update { it.copy(isLoading = false, registroExitoso = true) }

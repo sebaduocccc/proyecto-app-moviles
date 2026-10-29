@@ -3,6 +3,7 @@ package com.mastermartini.ui.profile
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mastermartini.data.model.Roles
 import com.mastermartini.data.repository.UsuarioRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,6 +15,7 @@ data class ProfileUiState(
     val lastName: String = "",
     val username: String = "",
     val imageUri: Uri? = null,
+    val esAdmin: Boolean = false,
     val isLoading: Boolean = true,
     val isSaving: Boolean = false,
     val errorMessage: String? = null
@@ -67,6 +69,7 @@ class ProfileViewModel(
                         lastName = usuario.apellido,
                         username = usuario.username,
                         imageUri = usuario.imageUri?.let { uriStr -> Uri.parse(uriStr) },
+                        esAdmin = usuario.role == Roles.ADMIN,
                         isLoading = false
                     )
                 }

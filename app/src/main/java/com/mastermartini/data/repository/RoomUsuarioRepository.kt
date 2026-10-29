@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken
 import com.mastermartini.data.local.UsuarioDao
 import com.mastermartini.data.model.Usuario
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -20,6 +21,8 @@ class RoomUsuarioRepository(
         Context.MODE_PRIVATE
     )
     private val mutex = Mutex()
+
+    override val usuarios: Flow<List<Usuario>> = dao.observarTodos()
 
     override suspend fun login(email: String, password: String): Usuario? {
         cargarUsuariosIniciales()
@@ -50,6 +53,37 @@ class RoomUsuarioRepository(
         preferences.edit()
             .putInt("usuario_id", usuarioId)
             .apply()
+    }
+
+    override suspend fun obtenerPorId(id: Int): Usuario? {
+        cargarUsuariosIniciales()
+        return dao.buscarPorId(id)
+    }
+
+    override suspend fun emailEnUso(email: String, excluirId: Int?): Boolean {
+        cargarUsuariosIniciales()
+        val usuario = dao.buscarPorEmail(email.trim()) ?: return false
+        return usuario.id != excluirId
+    }
+
+    override suspend fun usernameEnUso(username: String, excluirId: Int?): Boolean {
+        cargarUsuariosIniciales()
+        val usuario = dao.buscarPorUsername(username.trim()) ?: return false
+        return usuario.id != excluirId
+    }
+
+    override suspend fun crearUsuario(usuario: Usuario): Usuario {
+        cargarUsuariosIniciales()
+        val id = dao.insertar(usuario).toInt()
+        return usuario.copy(id = id)
+    }
+
+    override suspend fun actualizarUsuario(usuario: Usuario) {
+        dao.actualizar(usuario)
+    }
+
+    override suspend fun eliminarUsuario(usuario: Usuario) {
+        dao.eliminar(usuario)
     }
 
     override suspend fun cerrarSesion() {

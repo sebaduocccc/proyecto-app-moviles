@@ -26,7 +26,6 @@ fun RegisterRoute(
 
     RegisterScreen(
         uiState = uiState,
-        onRolChange = viewModel::onRolChange,
 
         onNombreChange = viewModel::onNombreChange,
         onApellidoChange = viewModel::onApellidoChange,

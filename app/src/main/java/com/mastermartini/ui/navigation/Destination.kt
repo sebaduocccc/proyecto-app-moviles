@@ -37,6 +37,22 @@ object ProductoDetalleDestination {
     fun createRoute(id: Int) = "producto/$id"
 }
 
+object AdminUsuariosDestination {
+
+    const val ROUTE = "admin_usuarios"
+}
+
+object AdminUsuarioFormDestination {
+
+    const val ARG_USUARIO_ID = "usuarioId"
+
+    const val NUEVO = -1
+
+    const val ROUTE = "admin_usuario/{$ARG_USUARIO_ID}"
+
+    fun createRoute(id: Int = NUEVO) = "admin_usuario/$id"
+}
+
 val bottomBarItems = listOf(
     Destination.Home, Destination.Catalogo, Destination.Profile
 )

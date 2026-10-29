@@ -11,7 +11,8 @@ import androidx.navigation.NavController
 fun ProfileRoute(
     navController: NavController,
     viewModel: ProfileViewModel,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onAdminClick: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -25,6 +26,8 @@ fun ProfileRoute(
         lastName = state.lastName,
         username = state.username,
         imageUri = state.imageUri,
+        esAdmin = state.esAdmin,
+        onAdminClick = onAdminClick,
         onLogoutClick = {
             viewModel.cerrarSesion()
             onLogout()
