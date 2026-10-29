@@ -14,7 +14,7 @@ La app reúne en un solo lugar recetas, videos técnicos y el catálogo de produ
 | _Sebastián Saavedra_ | _Usuarios y Administración_ |
 | _Cristóbal Spínola_ | _Perfiles de Usuario y sus Roles_ |
 
-Equipo N° _6_
+Equipo N° _4_
 
 ## Funcionalidades
 
