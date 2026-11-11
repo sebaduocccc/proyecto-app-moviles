@@ -45,6 +45,7 @@ fun LoginScreen(
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
     onRegisterClick: () -> Unit,
+    onInvitadoClick: () -> Unit,
 
     modifier: Modifier = Modifier
 ) {
@@ -127,6 +128,9 @@ fun LoginScreen(
                 Text("Regístrate")
             }
         }
+        TextButton(onClick = onInvitadoClick) {
+            Text("Continuar como invitado")
+        }
     }
 }
 
@@ -143,6 +147,7 @@ fun LoginPreview() {
             onPasswordChange = {},
             onLoginClick = {},
             onRegisterClick = {},
+            onInvitadoClick = {},
         )
     }
 }

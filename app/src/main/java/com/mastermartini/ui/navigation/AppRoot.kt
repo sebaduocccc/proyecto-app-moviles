@@ -80,7 +80,12 @@ fun AppRoot() {
                     onRegisterClick = {
                         nav.navigate(AppScreens.registerScreen.route)
                     },
-                    modifier = Modifier.statusBarsPadding()
+                    onGuestSuccess = {
+                        nav.navigate(Destination.Home.route) {
+                            popUpTo(AppScreens.loginScreen.route) { inclusive = true }
+                        }
+                    },
+                    modifier = Modifier.statusBarsPadding(),
                 )
             }
 

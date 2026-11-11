@@ -37,6 +37,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
@@ -53,6 +54,7 @@ fun ProfileScreen(
     username: String,
     imageUri: Uri? = null,
     esAdmin: Boolean = false,
+    esInvitado: Boolean = false,
     onAdminClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {}
 ) {
@@ -65,6 +67,7 @@ fun ProfileScreen(
             username = username,
             imageUri = imageUri,
             esAdmin = esAdmin,
+            esInvitado = esInvitado,
             onAdminClick = onAdminClick,
             navController = navController,
             onLogoutClick = onLogoutClick,
@@ -82,6 +85,7 @@ fun ProfileContent(
     username: String,
     imageUri: Uri? = null,
     esAdmin: Boolean = false,
+    esInvitado: Boolean = false,
     onAdminClick: () -> Unit = {},
     onLogoutClick: () -> Unit
 ) {
@@ -123,45 +127,65 @@ fun ProfileContent(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
-                ProfileImage(imageUri = imageUri)
-
-                Text(
-                    text = "$name $lastName",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.SemiBold
-                )
-
-                Text(
-                    text = "@$username",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                Button(
-                    onClick = {
-                        navController.navigate(AppScreens.editProfileScreen.route)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Editar perfil")
-                }
-
-                if (esAdmin) {
-                    FilledTonalButton(
-                        onClick = onAdminClick,
+                if (esInvitado) {
+                    Text(
+                        text = "Has iniciado sesión como invitado",
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Text(
+                        text = "Inicia sesión o crea una cuenta para poder editar tu perfil.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Button(
+                        onClick = onLogoutClick,
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Icon(Icons.Default.AdminPanelSettings, contentDescription = null)
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text("Panel de administración")
+                        Text("Volver a inicio de sesión")
                     }
-                }
+                } else {
+                    ProfileImage(imageUri = imageUri)
 
-                OutlinedButton(
-                    onClick = onLogoutClick,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text("Cerrar sesión")
+                    Text(
+                        text = "$name $lastName",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.SemiBold
+                    )
+
+                    Text(
+                        text = "@$username",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Button(
+                        onClick = {
+                            navController.navigate(AppScreens.editProfileScreen.route)
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Editar perfil")
+                    }
+
+                    if (esAdmin) {
+                        FilledTonalButton(
+                            onClick = onAdminClick,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Icon(Icons.Default.AdminPanelSettings, contentDescription = null)
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Panel de administración")
+                        }
+                    }
+
+                    OutlinedButton(
+                        onClick = onLogoutClick,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Cerrar sesión")
+                    }
                 }
             }
         }
@@ -226,12 +250,25 @@ fun ProfilePreview() {
     MasterMartiniTheme {
         ProfileScreen(
             //Nombres solo son placeholders
-            name = "Vicente",
-            lastName = "Garcia",
-            username = "vicentitoxd",
-            navController = rememberNavController())
-
+            name = "Nombre",
+            lastName = "Apellido",
+            username = "NombreUsuario",
+            navController = rememberNavController()
+        )
     }
 }
 
-
+@Preview(showBackground = true)
+@Composable
+fun ProfileInvitadoPreview() {
+    MasterMartiniTheme {
+        ProfileScreen(
+            //Nombres solo son placeholders
+            name = "",
+            lastName = "",
+            username = "",
+            esInvitado = true,
+            navController = rememberNavController()
+        )
+    }
+}

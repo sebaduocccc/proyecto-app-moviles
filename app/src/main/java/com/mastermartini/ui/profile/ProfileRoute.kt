@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
 @Composable
@@ -27,6 +26,7 @@ fun ProfileRoute(
         username = state.username,
         imageUri = state.imageUri,
         esAdmin = state.esAdmin,
+        esInvitado = state.esInvitado,
         onAdminClick = onAdminClick,
         onLogoutClick = {
             viewModel.cerrarSesion()
