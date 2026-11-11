@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import androidx.core.content.edit
 
 class RoomUsuarioRepository(
     private val context: Context,
@@ -50,9 +51,9 @@ class RoomUsuarioRepository(
         return usuarioRegistrado
     }
     override suspend fun guardarUsuarioActual(usuarioId: Int) {
-        preferences.edit()
-            .putInt("usuario_id", usuarioId)
-            .apply()
+        preferences.edit {
+            putInt("usuario_id", usuarioId)
+        }
     }
 
     override suspend fun obtenerPorId(id: Int): Usuario? {
@@ -87,9 +88,9 @@ class RoomUsuarioRepository(
     }
 
     override suspend fun cerrarSesion() {
-        preferences.edit()
-            .remove("usuario_id")
-            .apply()
+        preferences.edit {
+            remove("usuario_id")
+        }
     }
 
     private suspend fun cargarUsuariosIniciales() = mutex.withLock {

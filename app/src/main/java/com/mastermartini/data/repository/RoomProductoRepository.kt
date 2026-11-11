@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import androidx.core.content.edit
 
 class RoomProductoRepository (
     private val context: Context,
@@ -20,6 +21,7 @@ class RoomProductoRepository (
     private val imageStorage: ImageStorage,
 ) : ProductoRepository {
     private val mutex = Mutex()
+    private val prefs = context.getSharedPreferences("seed_flags", Context.MODE_PRIVATE)
 
     override val productos: Flow<List<Producto>> = flow {
         cargarProductosIniciales()
@@ -53,9 +55,12 @@ class RoomProductoRepository (
     }
 
     private suspend fun cargarProductosIniciales() = mutex.withLock {
+        if (prefs.getBoolean("productos_seeded", false)) return@withLock
+
         if (dao.contar() == 0) {
             dao.insertarTodos(leerProductosDesdeAssets())
         }
+        prefs.edit { putBoolean("productos_seeded", true) }
     }
 
     private suspend fun leerProductosDesdeAssets(filename: String = "productos.json"): List<Producto> =
