@@ -11,5 +11,6 @@ data class LoginUiState(
     val isLoading: Boolean = false,
     val loginExitoso: Boolean = false,
     val usuarioLogueado: Usuario? = null,
-    val intentosFallidos: Int = 0
+    val intentosFallidos: Int = 0,
+    val invitadoExitoso: Boolean = false,
 )

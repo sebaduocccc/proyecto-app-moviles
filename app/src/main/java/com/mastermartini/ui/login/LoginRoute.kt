@@ -11,9 +11,10 @@ import com.mastermartini.data.model.Roles
 @Composable
 fun LoginRoute(
     onLoginSuccess: (Roles) -> Unit,
+    onGuestSuccess: () -> Unit,
     onRegisterClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: LoginViewModel = viewModel(factory = LoginViewModelFactory)
+    viewModel: LoginViewModel = viewModel(factory = LoginViewModelFactory),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -27,12 +28,20 @@ fun LoginRoute(
         }
     }
 
+    LaunchedEffect(uiState.invitadoExitoso) {
+        if (uiState.invitadoExitoso) {
+            onGuestSuccess()
+            viewModel.onLoginHandled()
+        }
+    }
+
     LoginScreen(
         uiState = uiState,
         onEmailChange = viewModel::onEmailChange,
         onPasswordChange = viewModel::onPasswordChange,
         onLoginClick = viewModel::onLoginClick,
         onRegisterClick = onRegisterClick,
+        onInvitadoClick = viewModel::onInvitadoClick,
         modifier = modifier,
     )
 }

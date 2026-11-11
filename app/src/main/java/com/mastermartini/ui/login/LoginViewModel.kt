@@ -64,6 +64,13 @@ class LoginViewModel(
         }
     }
 
+    fun onInvitadoClick() {
+        viewModelScope.launch {
+            repository.entrarComoInvitado()
+            _uiState.update { it.copy(invitadoExitoso = true) }
+        }
+    }
+
     fun onLoginHandled() {
         _uiState.update { LoginUiState() }
     }

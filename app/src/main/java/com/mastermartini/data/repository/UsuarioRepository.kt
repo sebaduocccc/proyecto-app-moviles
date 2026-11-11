@@ -30,4 +30,7 @@ interface UsuarioRepository {
         username: String,
         imageUri: String?
     ): Usuario
+
+    suspend fun entrarComoInvitado()
+    suspend fun esInvitado(): Boolean
 }

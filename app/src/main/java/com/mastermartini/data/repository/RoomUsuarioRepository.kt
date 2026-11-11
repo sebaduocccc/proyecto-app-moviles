@@ -53,6 +53,8 @@ class RoomUsuarioRepository(
     override suspend fun guardarUsuarioActual(usuarioId: Int) {
         preferences.edit {
             putInt("usuario_id", usuarioId)
+            remove("es_invitado")
+            apply()
         }
     }
 
@@ -90,8 +92,21 @@ class RoomUsuarioRepository(
     override suspend fun cerrarSesion() {
         preferences.edit {
             remove("usuario_id")
+            remove("es_invitado")
+            apply()
         }
     }
+
+    override suspend fun entrarComoInvitado() {
+        preferences.edit {
+            remove("usuario_id")
+            putBoolean("es_invitado", true)
+            apply()
+        }
+    }
+
+    override suspend fun esInvitado(): Boolean =
+        preferences.getBoolean("es_invitado", false)
 
     private suspend fun cargarUsuariosIniciales() = mutex.withLock {
         if (dao.contar() == 0) {

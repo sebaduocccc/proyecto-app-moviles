@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
 data class ProfileUiState(
     val name: String = "",
@@ -16,6 +17,7 @@ data class ProfileUiState(
     val username: String = "",
     val imageUri: Uri? = null,
     val esAdmin: Boolean = false,
+    val esInvitado: Boolean = false,
     val isLoading: Boolean = true,
     val isSaving: Boolean = false,
     val errorMessage: String? = null
@@ -55,7 +57,13 @@ class ProfileViewModel(
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             try {
+                if (repository.esInvitado()) {
+                    _uiState.update { ProfileUiState(esInvitado = true, isLoading = false) }
+                    return@launch
+                }
+
                 val usuario = repository.obtenerUsuarioActual()
+
                 if (usuario == null) {
                     _uiState.update {
                         it.copy(isLoading = false, errorMessage = "No se encontró el usuario")
@@ -68,8 +76,9 @@ class ProfileViewModel(
                         name = usuario.nombre,
                         lastName = usuario.apellido,
                         username = usuario.username,
-                        imageUri = usuario.imageUri?.let { uriStr -> Uri.parse(uriStr) },
+                        imageUri = usuario.imageUri?.toUri(),
                         esAdmin = usuario.role == Roles.ADMIN,
+                        esInvitado = false,
                         isLoading = false
                     )
                 }
