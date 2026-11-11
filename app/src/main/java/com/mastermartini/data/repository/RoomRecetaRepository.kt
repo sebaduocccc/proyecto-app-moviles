@@ -1,6 +1,7 @@
 package com.mastermartini.data.repository
 
 import android.content.Context
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mastermartini.data.local.ImageStorage
@@ -20,6 +21,7 @@ class RoomRecetaRepository(
     private val imageStorage: ImageStorage,
 ) : RecetaRepository {
     private val mutex = Mutex()
+    private val prefs = context.getSharedPreferences("seed_flags", Context.MODE_PRIVATE)
 
     override val recetas: Flow<List<Receta>> = flow {
         cargarRecetasIniciales()
@@ -71,9 +73,12 @@ class RoomRecetaRepository(
         listOfNotNull(receta.imageUri) + receta.pasos.mapNotNull { it.imageUri }
 
     private suspend fun cargarRecetasIniciales() = mutex.withLock {
+        if (prefs.getBoolean("recetas_seeded", false)) return@withLock
+
         if (dao.contar() == 0) {
             dao.insertarTodas(leerRecetasDesdeAssets())
         }
+        prefs.edit { putBoolean("recetas_seeded", true) }
     }
 
     private suspend fun leerRecetasDesdeAssets(filename: String = "recetas.json"): List<Receta> =
